@@ -128,3 +128,15 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Protected Operator procedure
+ * if you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
+ * the session is valid and guarantees `ctx.session.user` is not null.
+ * And additionally checks if the user is an operator
+ */
+export const operatorProcedure = t.procedure.use(async ({ ctx, next }) => {
+  ctx.db.query.operators.findFirst({
+    where: (tb, op) => op.eq(tb.user_id),
+  });
+});
