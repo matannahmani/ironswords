@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "6de04ea5-8f6b-4488-8e81-8bc84ad3118f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "5bf32588-cf32-4100-8ca7-f3ca0083bda4",
+  "prevId": "6de04ea5-8f6b-4488-8e81-8bc84ad3118f",
   "tables": {
     "ironswords_account": {
       "name": "ironswords_account",
@@ -111,7 +111,7 @@
       "columns": {
         "category_id": {
           "name": "category_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -141,7 +141,7 @@
       "columns": {
         "city_id": {
           "name": "city_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -171,7 +171,7 @@
       "columns": {
         "item_id": {
           "name": "item_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -273,14 +273,14 @@
       "columns": {
         "location_id": {
           "name": "location_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "operator_id": {
           "name": "operator_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -319,7 +319,7 @@
       "columns": {
         "location_id": {
           "name": "location_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -340,14 +340,7 @@
         },
         "city_id": {
           "name": "city_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "operator_id": {
-          "name": "operator_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -378,7 +371,7 @@
       "columns": {
         "operator_id": {
           "name": "operator_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -496,21 +489,21 @@
       "columns": {
         "response_id": {
           "name": "response_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "ticket_id": {
           "name": "ticket_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "user_id": {
           "name": "user_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -604,21 +597,21 @@
       "columns": {
         "ticket_id": {
           "name": "ticket_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "location_id": {
           "name": "location_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "operator_id": {
           "name": "operator_id",
-          "type": "int",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -863,7 +856,7 @@
       "columns": {
         "warehouse_id": {
           "name": "warehouse_id",
-          "type": "varchar(21)",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

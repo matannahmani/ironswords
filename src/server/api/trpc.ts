@@ -140,10 +140,14 @@ export const operatorProcedure = protectedProcedure.use(
     const operator = await ctx.db.query.operators.findFirst({
       where: (tb, op) => op.eq(tb.user_id, ctx.session.user?.id),
       with: {
-        locations: true,
+        locationOperators: {
+          with: {
+            location: true,
+          },
+        },
       },
     });
-    if (!operator) {
+    if (!operator ?? !operator?.locationOperators.length) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({

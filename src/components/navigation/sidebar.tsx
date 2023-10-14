@@ -1,12 +1,13 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Home, Tags } from "lucide-react";
+import { Home, LayoutDashboard, Tags } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 import { Button } from "../ui/button";
 import { ModeToggler } from "./mode-toggler";
 import { Separator } from "../ui/separator";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 const SidebarItem: React.FC<{
   isSelected?: boolean;
@@ -21,7 +22,7 @@ const SidebarItem: React.FC<{
         "bg-primary/10 text-primary/90 dark:bg-primary dark:text-primary-foreground",
     )}
   >
-    <div className="ml-2.5 flex items-start gap-2.5">
+    <div className="mr-2.5 flex items-start gap-2.5">
       {icon}
       <Link
         href={href}
@@ -37,15 +38,22 @@ const navItems: {
   href: string;
   title: string;
   icon: React.ReactNode;
+  isOperator?: boolean;
 }[] = [
   {
     href: "/",
-    title: "Home",
+    title: "בית",
     icon: <Home size={24} />,
   },
   {
+    href: "/operators/tickets",
+    title: "ניהול פניות",
+    icon: <LayoutDashboard size={24} />,
+    isOperator: true,
+  },
+  {
     href: "/my-tickets",
-    title: "My Tickets",
+    title: "הפניות שלי",
     icon: <Tags size={24} />,
   },
 ];
@@ -60,12 +68,12 @@ export default function Sidebar({
   return (
     <aside
       className={cn(
-        "border-r-border-20 sticky top-0 z-10 hidden h-screen w-[240px] max-w-full flex-col border-r border-solid bg-background pb-10 pt-[22px] text-foreground md:flex",
+        "border-r-border-20 sticky top-0 z-10 hidden h-screen w-[240px] max-w-full flex-col border-l border-r border-solid bg-background pb-10 pt-[22px] text-foreground md:flex",
         containerClassName,
       )}
     >
-      <h1 className="ml-0 self-center text-2xl font-semibold uppercase">
-        IronSwords
+      <h1 className="mr-0 self-center text-2xl font-semibold uppercase">
+        חרבות ברזל
       </h1>
 
       <div className="mt-12 flex flex-col justify-center gap-4">
@@ -81,7 +89,7 @@ export default function Sidebar({
       </div>
       <div className="mt-auto flex flex-row justify-evenly">
         <Button disabled size="sm" variant="ghost">
-          Donate
+          לתרומות
         </Button>
         <Separator orientation="vertical" />
         <ModeToggler />

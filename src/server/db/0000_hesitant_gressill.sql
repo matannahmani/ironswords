@@ -14,19 +14,19 @@ CREATE TABLE `ironswords_account` (
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_categorie` (
-	`category_id` int AUTO_INCREMENT NOT NULL,
+	`category_id` varchar(21) NOT NULL,
 	`name` varchar(255),
 	CONSTRAINT `ironswords_categorie_category_id` PRIMARY KEY(`category_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_city` (
-	`city_id` int AUTO_INCREMENT NOT NULL,
+	`city_id` varchar(21) NOT NULL,
 	`name` varchar(255),
 	CONSTRAINT `ironswords_city_city_id` PRIMARY KEY(`city_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_item` (
-	`item_id` int AUTO_INCREMENT NOT NULL,
+	`item_id` varchar(21) NOT NULL,
 	`warehouse_id` int,
 	`category_id` int,
 	`name` varchar(255),
@@ -44,7 +44,7 @@ CREATE TABLE `ironswords_location_operator` (
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_location` (
-	`location_id` int AUTO_INCREMENT NOT NULL,
+	`location_id` varchar(21) NOT NULL,
 	`name` varchar(255),
 	`address` varchar(255),
 	`city_id` int,
@@ -53,12 +53,14 @@ CREATE TABLE `ironswords_location` (
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_operator` (
-	`operator_id` int AUTO_INCREMENT NOT NULL,
+	`operator_id` varchar(21) NOT NULL,
 	`name` varchar(255),
+	`user_id` varchar(255),
 	`phone` varchar(255),
 	`email` varchar(255),
 	`contact_info` varchar(255),
-	CONSTRAINT `ironswords_operator_operator_id` PRIMARY KEY(`operator_id`)
+	CONSTRAINT `ironswords_operator_operator_id` PRIMARY KEY(`operator_id`),
+	CONSTRAINT `ironswords_operator_user_id_unique` UNIQUE(`user_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_session` (
@@ -69,7 +71,7 @@ CREATE TABLE `ironswords_session` (
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_ticket_response` (
-	`response_id` int AUTO_INCREMENT NOT NULL,
+	`response_id` varchar(21) NOT NULL,
 	`ticket_id` int,
 	`user_id` int,
 	`message` text,
@@ -81,12 +83,13 @@ CREATE TABLE `ironswords_ticket_response` (
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_ticket` (
-	`ticket_id` int AUTO_INCREMENT NOT NULL,
+	`ticket_id` varchar(21) NOT NULL,
 	`location_id` int,
+	`operator_id` int,
 	`title` varchar(255),
 	`description` text,
-	`priority` enum('Low','Medium','High','Urgent'),
-	`status` enum('Open','Completed'),
+	`priority` enum('LOW','MID','HIGH','URGENT'),
+	`status` enum('OPEN','CLOSED','ASSIGNED'),
 	`deadline` datetime,
 	`created_at` datetime,
 	`updated_at` datetime,
@@ -111,7 +114,7 @@ CREATE TABLE `ironswords_verificationToken` (
 );
 --> statement-breakpoint
 CREATE TABLE `ironswords_warehouse` (
-	`warehouse_id` int AUTO_INCREMENT NOT NULL,
+	`warehouse_id` varchar(21) NOT NULL,
 	`name` varchar(255),
 	`city_id` int,
 	CONSTRAINT `ironswords_warehouse_warehouse_id` PRIMARY KEY(`warehouse_id`)
@@ -125,6 +128,7 @@ CREATE INDEX `lastUpdated_idx` ON `ironswords_item` (`last_updated`);--> stateme
 CREATE INDEX `warehouseIdCategoryId_idx` ON `ironswords_item` (`warehouse_id`,`category_id`);--> statement-breakpoint
 CREATE INDEX `locationOperatorLocationId_idx` ON `ironswords_location_operator` (`location_id`);--> statement-breakpoint
 CREATE INDEX `cityId_idx` ON `ironswords_location` (`city_id`);--> statement-breakpoint
+CREATE INDEX `userId_idx` ON `ironswords_operator` (`user_id`);--> statement-breakpoint
 CREATE INDEX `userId_idx` ON `ironswords_session` (`userId`);--> statement-breakpoint
 CREATE INDEX `ticketId_idx` ON `ironswords_ticket_response` (`ticket_id`);--> statement-breakpoint
 CREATE INDEX `userId_idx` ON `ironswords_ticket_response` (`user_id`);--> statement-breakpoint
@@ -135,6 +139,7 @@ CREATE INDEX `locationId_idx` ON `ironswords_ticket` (`location_id`);--> stateme
 CREATE INDEX `priotity_idx` ON `ironswords_ticket` (`priority`);--> statement-breakpoint
 CREATE INDEX `status_idx` ON `ironswords_ticket` (`status`);--> statement-breakpoint
 CREATE INDEX `deadline_idx` ON `ironswords_ticket` (`deadline`);--> statement-breakpoint
+CREATE INDEX `operatorId_idx` ON `ironswords_ticket` (`operator_id`);--> statement-breakpoint
 CREATE INDEX `createdAt_idx` ON `ironswords_ticket` (`created_at`);--> statement-breakpoint
 CREATE INDEX `locationIdPriority_idx` ON `ironswords_ticket` (`location_id`,`priority`);--> statement-breakpoint
 CREATE INDEX `locationIdStatus_idx` ON `ironswords_ticket` (`location_id`,`status`);--> statement-breakpoint

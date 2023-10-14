@@ -39,6 +39,16 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { SelectLocations } from "./select-locations";
 
 const LoginOrAvatar = async () => {
   const { session } = await api.user.whoami.query();
@@ -100,6 +110,15 @@ const LoginOrAvatar = async () => {
   );
 };
 
+const SelectLocation = async () => {
+  try {
+    const { locations } = await api.user.myLocations.query();
+    return <SelectLocations locations={locations} />;
+  } catch (err) {
+    return <span className="font-semibold">Call Center</span>;
+  }
+};
+
 export default function NavbarHeader() {
   return (
     <section className="sticky top-0 z-10 border-b border-border ">
@@ -112,7 +131,11 @@ export default function NavbarHeader() {
                 "my-auto hidden self-center text-lg font-semibold md:block",
               )}
             >
-              <span className="font-semibold">Call Center</span>
+              <Suspense
+                fallback={<span className="font-semibold">Call Center</span>}
+              >
+                <SelectLocation />
+              </Suspense>
             </div>
           </div>
           <div className="flex items-center justify-between gap-4 self-stretch">

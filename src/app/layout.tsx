@@ -13,6 +13,8 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+// export const runtime = "edge";
+
 export const metadata = {
   title: "IronSwords - חרבות ברזל",
   description: "Together we are stronger, Pray for Israel 🇮🇱",
@@ -26,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="he">
-      <body className={`font-sans ${inter.variable}`}>
+      <body dir="rtl" className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider headers={headers()}>
             <div className="flex">
