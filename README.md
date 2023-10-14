@@ -1,28 +1,23 @@
-# Create T3 App
+# Operation IronSwords
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# 🇮🇱 Community Aid Ticketing and Inventory Management System 🇮🇱
 
-## What's next? How do I make an app with this?
+## English:
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+In light of the on-going war, IronSwords, we are developing a system to provide pivotal support to our communities during such critical times. This open-source project is aimed at creating a web application to facilitate logistics among hotels/locations, volunteers, and warehouses within a city. Each hotel or location operates a ticketing system where operators can create, manage, and resolve tickets regarding aid requests or information dissemination. Furthermore, the system manages inventory across different warehouses, categorizing items like clothing, hygiene products, food, and children's games. By enhancing communication and aid distribution, this initiative ensures prompt and effective assistance to those in need during turbulent times. Your contributions and support towards this cause are highly appreciated.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## עברית:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+באור המלחמה הרותחת, חרבות ברזל, אנו מפתחים מערכת לספק תמיכה חשובה לקהלות שלנו בתקופות קריטיות כאלה. פרויקט זה, הפתוח לקוד, מכוון ליצירת אפליקציה אינטרנטית שתקל על הלוגיסטיקה בין מלונות/מקומות, מתנדבים ומחסנים בעיר. לכל מלון או מקום יש מערכת כרטיסים שבה המפעילים יכולים ליצור, לנהל ולפתור כרטיסים הקשורים לבקשות סיוע או הפצת מידע. בנוסף, המערכת מנהלת מלאי במחסנים שונים, וממיינת פריטים כמו בגדים, מוצרי היגיינה, מזון ומשחקים לילדים. על ידי עידוד תקשורת יעילה וחלוקת סיוע, יוזמה זו מבטיחה סיוע מהיר ויעיל לאלה הזקוקים לו בתקופות סוערות. התרומות והתמיכה שלכם במטרה זו מוערכות ביותר.
 
-## Learn More
+---
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Supporting our project:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Your support is invaluable in making a difference in the lives of many. Whether it's by contributing code, reporting bugs, or spreading the word about this project, every bit helps. Together, we can build a system that truly stands for community, solidarity, and aid.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### תמיכה בפרויקט שלנו:
 
-## How do I deploy this?
+התמיכה שלכם חשובה במיוחד כדי ליצור הבדל בחיים של רבים. אם זה על ידי תרומת קוד, דיווח על באגים, או הפצת המילה על הפרויקט הזה, כל תרומה קטנה עוזרת. יחד, אנו יכולים לבנות מערכת שבאמת מייצגת קהילה, סולידריות, וסיוע.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+---
