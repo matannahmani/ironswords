@@ -22,23 +22,6 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const mysqlTable = mysqlTableCreator((name) => `ironswords_${name}`);
 
-export const posts = mysqlTable(
-  "post",
-  {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 }).notNull(),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
-  },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
-
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
@@ -47,6 +30,7 @@ export const users = mysqlTable("user", {
     mode: "date",
     fsp: 3,
   }).default(sql`CURRENT_TIMESTAMP(3)`),
+  role: mysqlEnum("role", ["USER", "ADMIN"]).default("USER"),
   image: varchar("image", { length: 255 }),
 });
 
@@ -111,65 +95,129 @@ export const verificationTokens = mysqlTable(
   }),
 );
 
-export const city = mysqlTable("city", {
+export const citys = mysqlTable("city", {
   city_id: int("city_id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }),
 });
 
 // Define the location table
-export const location = mysqlTable("locations", {
-  hotel_id: int("hotel_id").primaryKey().autoincrement(),
+export const locations = mysqlTable("location", {
+  location_id: int("location_id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }),
   address: varchar("address", { length: 255 }),
-  city: varchar("city", { length: 255 }),
+  city_id: int("city_id").references(() => citys.city_id),
   operator_id: int("operator_id"),
 });
 
+// define location operator join table
+export const locationOperators = mysqlTable(
+  "location_operator",
+  {
+    location_id: int("location_id").references(() => locations.location_id),
+    operator_id: int("operator_id").references(() => operators.operator_id),
+    role: mysqlEnum("role", ["Admin", "Operator"]),
+  },
+  (locationOperator) => ({
+    // indexes
+    locationOperatorCompoundKey: primaryKey(
+      locationOperator.location_id,
+      locationOperator.operator_id,
+    ),
+    locationOperatorLocationIdIdx: index("locationOperatorLocationId_idx").on(
+      locationOperator.location_id,
+    ),
+  }),
+);
+
 // Define the Operators table
-export const Operators = mysqlTable("operators", {
+export const operators = mysqlTable("operator", {
   operator_id: int("operator_id").primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }),
+  phone: varchar("phone", { length: 255 }),
+  email: varchar("email", { length: 255 }),
   contact_info: varchar("contact_info", { length: 255 }),
 });
 
 // Define the Tickets table
-export const Tickets = mysqlTable("tickets", {
-  ticket_id: int("ticket_id").primaryKey().autoincrement(),
-  hotel_id: int("hotel_id"),
-  title: varchar("title", { length: 255 }),
-  description: text("description"),
-  priority: mysqlEnum("priority", ["Low", "Medium", "High", "Urgent"]),
-  status: mysqlEnum("status", ["Open", "Completed"]),
-  deadline: datetime("deadline"),
-  created_at: datetime("created_at"),
-  updated_at: datetime("updated_at"),
-});
-
-// // Define the Users table
-// export const Users = mysqlTable("users", {
-//   user_id: int("user_id").primaryKey().autoincrement(),
-//   name: varchar("name", { length: 255 }),
-//   contact_info: varchar("contact_info", { length: 255 }),
-// });
+export const tickets = mysqlTable(
+  "tickets",
+  {
+    ticket_id: int("ticket_id").primaryKey().autoincrement(),
+    location_id: int("location_id").references(() => locations.location_id),
+    title: varchar("title", { length: 255 }),
+    description: text("description"),
+    priority: mysqlEnum("priority", ["Low", "Medium", "High", "Urgent"]),
+    status: mysqlEnum("status", ["Open", "Completed"]),
+    deadline: datetime("deadline"),
+    created_at: datetime("created_at"),
+    updated_at: datetime("updated_at"),
+  },
+  (ticket) => ({
+    // indexes
+    locationIdIdx: index("locationId_idx").on(ticket.location_id),
+    priotityIdx: index("priotity_idx").on(ticket.priority),
+    statusIdx: index("status_idx").on(ticket.status),
+    deadlineIdx: index("deadline_idx").on(ticket.deadline),
+    createdAtIdx: index("createdAt_idx").on(ticket.created_at),
+    locationIdPriorityIdx: index("locationIdPriority_idx").on(
+      ticket.location_id,
+      ticket.priority,
+    ),
+    locationIdStatusIdx: index("locationIdStatus_idx").on(
+      ticket.location_id,
+      ticket.status,
+    ),
+    locationIdDeadlineIdx: index("locationIdDeadline_idx").on(
+      ticket.location_id,
+      ticket.deadline,
+    ),
+    locationIdCreatedAtIdx: index("locationIdCreatedAt_idx").on(
+      ticket.location_id,
+      ticket.created_at,
+    ),
+  }),
+);
 
 // Define the TicketResponses table
-export const TicketResponses = mysqlTable("ticket_responses", {
-  response_id: int("response_id").primaryKey().autoincrement(),
-  ticket_id: int("ticket_id"),
-  user_id: int("user_id"),
-  message: text("message"),
-  is_requesting_transpription: boolean("is_requesting_transpription"),
-  is_client_done: boolean("is_client_done"),
-  is_client_drop: boolean("is_client_drop"),
-  created_at: datetime("created_at"),
-});
+export const ticketResponses = mysqlTable(
+  "ticket_responses",
+  {
+    response_id: int("response_id").primaryKey().autoincrement(),
+    ticket_id: int("ticket_id").references(() => tickets.ticket_id),
+    user_id: int("user_id").references(() => operators.operator_id),
+    content: text("message"),
+    is_requesting_transportion: boolean("is_requesting_transportion"),
+    is_client_done: boolean("is_client_done"),
+    is_client_drop: boolean("is_client_drop"),
+    created_at: datetime("created_at"),
+  },
+  (ticketResponse) => ({
+    // indexes
+    ticketIdIdx: index("ticketId_idx").on(ticketResponse.ticket_id),
+    userIdIdx: index("userId_idx").on(ticketResponse.user_id),
+    createdAtIdx: index("createdAt_idx").on(ticketResponse.created_at),
+    isClientDoneIdx: index("isClientDone_idx").on(
+      ticketResponse.is_client_done,
+    ),
+    isClientDropIdx: index("isClientDrop_idx").on(
+      ticketResponse.is_client_drop,
+    ),
+  }),
+);
 
 // Define the Warehouses table
-export const Warehouses = mysqlTable("warehouses", {
-  warehouse_id: int("warehouse_id").primaryKey().autoincrement(),
-  name: varchar("name", { length: 255 }),
-  city: varchar("city", { length: 255 }),
-});
+export const Warehouses = mysqlTable(
+  "warehouses",
+  {
+    warehouse_id: int("warehouse_id").primaryKey().autoincrement(),
+    name: varchar("name", { length: 255 }),
+    city_id: int("city_id").references(() => citys.city_id),
+  },
+  (warehouse) => ({
+    // indexes
+    cityIdIdx: index("cityId_idx").on(warehouse.city_id),
+  }),
+);
 
 // Define the Categories table
 export const Categories = mysqlTable("categories", {
@@ -178,12 +226,26 @@ export const Categories = mysqlTable("categories", {
 });
 
 // Define the Items table
-export const Items = mysqlTable("items", {
-  item_id: int("item_id").primaryKey().autoincrement(),
-  warehouse_id: int("warehouse_id"),
-  category_id: int("category_id"),
-  name: varchar("name", { length: 255 }),
-  quantity: int("quantity"),
-  stock: mysqlEnum("stock", ["none", "low", "medium", "high"]),
-  last_updated: datetime("last_updated"),
-});
+export const Items = mysqlTable(
+  "items",
+  {
+    item_id: int("item_id").primaryKey().autoincrement(),
+    warehouse_id: int("warehouse_id").references(() => Warehouses.warehouse_id),
+    category_id: int("category_id").references(() => Categories.category_id),
+    name: varchar("name", { length: 255 }),
+    quantity: int("quantity"),
+    stock: mysqlEnum("stock", ["none", "low", "medium", "high"]),
+    last_updated: datetime("last_updated"),
+  },
+  (item) => ({
+    // indexes
+    warehouseIdIdx: index("warehouseId_idx").on(item.warehouse_id),
+    categoryIdIdx: index("categoryId_idx").on(item.category_id),
+    stockIdx: index("stock_idx").on(item.stock),
+    lastUpdatedIdx: index("lastUpdated_idx").on(item.last_updated),
+    warehouseIdCategoryIdIdx: index("warehouseIdCategoryId_idx").on(
+      item.warehouse_id,
+      item.category_id,
+    ),
+  }),
+);
