@@ -96,7 +96,7 @@ export const verificationTokens = mysqlTable(
 );
 
 export const citys = mysqlTable("city", {
-  city_id: int("city_id").primaryKey().autoincrement(),
+  city_id: int("city_id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }),
 });
 
@@ -104,7 +104,7 @@ export const citys = mysqlTable("city", {
 export const locations = mysqlTable(
   "location",
   {
-    location_id: int("location_id").primaryKey().autoincrement(),
+    location_id: int("location_id").autoincrement().primaryKey(),
     name: varchar("name", { length: 255 }),
     address: varchar("address", { length: 255 }),
     city_id: int("city_id"),
@@ -127,10 +127,9 @@ export const locationOperators = mysqlTable(
   },
   (locationOperator) => ({
     // indexes
-    locationOperatorCompoundKey: primaryKey(
-      locationOperator.location_id,
-      locationOperator.operator_id,
-    ),
+    locationOperatorCompoundKey: primaryKey({
+      columns: [locationOperator.location_id, locationOperator.operator_id],
+    }),
     locationOperatorLocationIdIdx: index("locationOperatorLocationId_idx").on(
       locationOperator.location_id,
     ),
@@ -139,7 +138,7 @@ export const locationOperators = mysqlTable(
 
 // Define the Operators table
 export const operators = mysqlTable("operator", {
-  operator_id: int("operator_id").primaryKey().autoincrement(),
+  operator_id: int("operator_id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }),
   phone: varchar("phone", { length: 255 }),
   email: varchar("email", { length: 255 }),
@@ -148,9 +147,9 @@ export const operators = mysqlTable("operator", {
 
 // Define the Tickets table
 export const tickets = mysqlTable(
-  "tickets",
+  "ticket",
   {
-    ticket_id: int("ticket_id").primaryKey().autoincrement(),
+    ticket_id: int("ticket_id").autoincrement().primaryKey(),
     location_id: int("location_id"),
     title: varchar("title", { length: 255 }),
     description: text("description"),
@@ -188,9 +187,9 @@ export const tickets = mysqlTable(
 
 // Define the TicketResponses table
 export const ticketResponses = mysqlTable(
-  "ticket_responses",
+  "ticket_response",
   {
-    response_id: int("response_id").primaryKey().autoincrement(),
+    response_id: int("response_id").autoincrement().primaryKey(),
     ticket_id: int("ticket_id"),
     user_id: int("user_id"),
     content: text("message"),
@@ -214,10 +213,10 @@ export const ticketResponses = mysqlTable(
 );
 
 // Define the Warehouses table
-export const Warehouses = mysqlTable(
-  "warehouses",
+export const warehouses = mysqlTable(
+  "warehouse",
   {
-    warehouse_id: int("warehouse_id").primaryKey().autoincrement(),
+    warehouse_id: int("warehouse_id").autoincrement().primaryKey(),
     name: varchar("name", { length: 255 }),
     city_id: int("city_id"),
   },
@@ -228,16 +227,16 @@ export const Warehouses = mysqlTable(
 );
 
 // Define the Categories table
-export const Categories = mysqlTable("categories", {
-  category_id: int("category_id").primaryKey().autoincrement(),
+export const categories = mysqlTable("categorie", {
+  category_id: int("category_id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }),
 });
 
 // Define the Items table
-export const Items = mysqlTable(
-  "items",
+export const items = mysqlTable(
+  "item",
   {
-    item_id: int("item_id").primaryKey().autoincrement(),
+    item_id: int("item_id").autoincrement().primaryKey(),
     warehouse_id: int("warehouse_id"),
     category_id: int("category_id"),
     name: varchar("name", { length: 255 }),

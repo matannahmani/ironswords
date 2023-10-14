@@ -1,0 +1,877 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "e6bad046-846f-4c20-b4b6-0fe3cd81b289",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "ironswords_account": {
+      "name": "ironswords_account",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider": {
+          "name": "provider",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_account_provider_providerAccountId": {
+          "name": "ironswords_account_provider_providerAccountId",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_categorie": {
+      "name": "ironswords_categorie",
+      "columns": {
+        "category_id": {
+          "name": "category_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_categorie_category_id": {
+          "name": "ironswords_categorie_category_id",
+          "columns": [
+            "category_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_city": {
+      "name": "ironswords_city",
+      "columns": {
+        "city_id": {
+          "name": "city_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_city_city_id": {
+          "name": "ironswords_city_city_id",
+          "columns": [
+            "city_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_item": {
+      "name": "ironswords_item",
+      "columns": {
+        "item_id": {
+          "name": "item_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "warehouse_id": {
+          "name": "warehouse_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "stock": {
+          "name": "stock",
+          "type": "enum('none','low','medium','high')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_updated": {
+          "name": "last_updated",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "warehouseId_idx": {
+          "name": "warehouseId_idx",
+          "columns": [
+            "warehouse_id"
+          ],
+          "isUnique": false
+        },
+        "categoryId_idx": {
+          "name": "categoryId_idx",
+          "columns": [
+            "category_id"
+          ],
+          "isUnique": false
+        },
+        "stock_idx": {
+          "name": "stock_idx",
+          "columns": [
+            "stock"
+          ],
+          "isUnique": false
+        },
+        "lastUpdated_idx": {
+          "name": "lastUpdated_idx",
+          "columns": [
+            "last_updated"
+          ],
+          "isUnique": false
+        },
+        "warehouseIdCategoryId_idx": {
+          "name": "warehouseIdCategoryId_idx",
+          "columns": [
+            "warehouse_id",
+            "category_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_item_item_id": {
+          "name": "ironswords_item_item_id",
+          "columns": [
+            "item_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_location_operator": {
+      "name": "ironswords_location_operator",
+      "columns": {
+        "location_id": {
+          "name": "location_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "operator_id": {
+          "name": "operator_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "enum('Admin','Operator')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "locationOperatorLocationId_idx": {
+          "name": "locationOperatorLocationId_idx",
+          "columns": [
+            "location_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_location_operator_location_id_operator_id": {
+          "name": "ironswords_location_operator_location_id_operator_id",
+          "columns": [
+            "location_id",
+            "operator_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_location": {
+      "name": "ironswords_location",
+      "columns": {
+        "location_id": {
+          "name": "location_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city_id": {
+          "name": "city_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "operator_id": {
+          "name": "operator_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "cityId_idx": {
+          "name": "cityId_idx",
+          "columns": [
+            "city_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_location_location_id": {
+          "name": "ironswords_location_location_id",
+          "columns": [
+            "location_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_operator": {
+      "name": "ironswords_operator",
+      "columns": {
+        "operator_id": {
+          "name": "operator_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "contact_info": {
+          "name": "contact_info",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_operator_operator_id": {
+          "name": "ironswords_operator_operator_id",
+          "columns": [
+            "operator_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_session": {
+      "name": "ironswords_session",
+      "columns": {
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_session_sessionToken": {
+          "name": "ironswords_session_sessionToken",
+          "columns": [
+            "sessionToken"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_ticket_response": {
+      "name": "ironswords_ticket_response",
+      "columns": {
+        "response_id": {
+          "name": "response_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "ticket_id": {
+          "name": "ticket_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_requesting_transportion": {
+          "name": "is_requesting_transportion",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_client_done": {
+          "name": "is_client_done",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_client_drop": {
+          "name": "is_client_drop",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "ticketId_idx": {
+          "name": "ticketId_idx",
+          "columns": [
+            "ticket_id"
+          ],
+          "isUnique": false
+        },
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "createdAt_idx": {
+          "name": "createdAt_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "isClientDone_idx": {
+          "name": "isClientDone_idx",
+          "columns": [
+            "is_client_done"
+          ],
+          "isUnique": false
+        },
+        "isClientDrop_idx": {
+          "name": "isClientDrop_idx",
+          "columns": [
+            "is_client_drop"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_ticket_response_response_id": {
+          "name": "ironswords_ticket_response_response_id",
+          "columns": [
+            "response_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_ticket": {
+      "name": "ironswords_ticket",
+      "columns": {
+        "ticket_id": {
+          "name": "ticket_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "enum('Low','Medium','High','Urgent')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('Open','Completed')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadline": {
+          "name": "deadline",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "locationId_idx": {
+          "name": "locationId_idx",
+          "columns": [
+            "location_id"
+          ],
+          "isUnique": false
+        },
+        "priotity_idx": {
+          "name": "priotity_idx",
+          "columns": [
+            "priority"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        },
+        "deadline_idx": {
+          "name": "deadline_idx",
+          "columns": [
+            "deadline"
+          ],
+          "isUnique": false
+        },
+        "createdAt_idx": {
+          "name": "createdAt_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "locationIdPriority_idx": {
+          "name": "locationIdPriority_idx",
+          "columns": [
+            "location_id",
+            "priority"
+          ],
+          "isUnique": false
+        },
+        "locationIdStatus_idx": {
+          "name": "locationIdStatus_idx",
+          "columns": [
+            "location_id",
+            "status"
+          ],
+          "isUnique": false
+        },
+        "locationIdDeadline_idx": {
+          "name": "locationIdDeadline_idx",
+          "columns": [
+            "location_id",
+            "deadline"
+          ],
+          "isUnique": false
+        },
+        "locationIdCreatedAt_idx": {
+          "name": "locationIdCreatedAt_idx",
+          "columns": [
+            "location_id",
+            "created_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_ticket_ticket_id": {
+          "name": "ironswords_ticket_ticket_id",
+          "columns": [
+            "ticket_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_user": {
+      "name": "ironswords_user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP(3)"
+        },
+        "role": {
+          "name": "role",
+          "type": "enum('USER','ADMIN')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'USER'"
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_user_id": {
+          "name": "ironswords_user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_verificationToken": {
+      "name": "ironswords_verificationToken",
+      "columns": {
+        "identifier": {
+          "name": "identifier",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_verificationToken_identifier_token": {
+          "name": "ironswords_verificationToken_identifier_token",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ironswords_warehouse": {
+      "name": "ironswords_warehouse",
+      "columns": {
+        "warehouse_id": {
+          "name": "warehouse_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city_id": {
+          "name": "city_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "cityId_idx": {
+          "name": "cityId_idx",
+          "columns": [
+            "city_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ironswords_warehouse_warehouse_id": {
+          "name": "ironswords_warehouse_warehouse_id",
+          "columns": [
+            "warehouse_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
