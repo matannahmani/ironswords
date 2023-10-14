@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import Sidebar from "@/components/navigation/sidebar";
+import NavbarHeader from "@/components/navigation/navbar-header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,7 +26,15 @@ export default function RootLayout({
   return (
     <html lang="he">
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        <TRPCReactProvider headers={headers()}>
+          <div className="flex">
+            <Sidebar />
+            <div className=" flex flex-1 flex-col ">
+              <NavbarHeader />
+              {children}
+            </div>
+          </div>
+        </TRPCReactProvider>
       </body>
     </html>
   );
