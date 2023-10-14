@@ -54,7 +54,7 @@ const LoginOrAvatar = async () => {
                   {session.user.name?.substring(0, 2)}
                 </AvatarFallback>
               </Avatar>
-              <div className="my-auto hidden self-center text-base font-semibold text-gray-900 md:block">
+              <div className="my-auto hidden self-center text-base font-semibold  md:block">
                 {session.user.name}
               </div>
               <ChevronDown size={24} className="my-auto self-center" />
@@ -102,8 +102,8 @@ const LoginOrAvatar = async () => {
 
 export default function NavbarHeader() {
   return (
-    <section className="border-border sticky top-0 border-b ">
-      <article className="bg-background flex w-full flex-col self-stretch px-5 py-4 shadow-[0px_4px_40px_1px_rgba(0,0,0,0.03)] max-md:max-w-full">
+    <section className="sticky top-0 z-10 border-b border-border ">
+      <article className="flex w-full flex-col self-stretch bg-background px-5 py-4 shadow-[0px_4px_40px_1px_rgba(0,0,0,0.03)] max-md:max-w-full">
         <header className="-mt-px flex w-full  items-start justify-between gap-5 self-center max-md:max-w-full max-md:flex-wrap">
           <div className="my-auto flex items-start gap-3.5 self-center">
             <MobileMenuToggler />
@@ -112,16 +112,14 @@ export default function NavbarHeader() {
                 "my-auto hidden self-center text-lg font-semibold md:block",
               )}
             >
-              <span className="font-semibold">
-                Welcome to IronSwords Call Center
-              </span>
+              <span className="font-semibold">Call Center</span>
             </div>
           </div>
           <div className="flex items-center justify-between gap-4 self-stretch">
             <Button size="icon" variant="outline" className="rounded-full">
               <div className="relative">
                 <Bell size={24} className="relative"></Bell>
-                <div className="bg-destructive absolute right-[2.5px] top-1 h-2 w-2 rounded-full" />
+                <div className="absolute right-[2.5px] top-1 h-2 w-2 rounded-full bg-destructive" />
               </div>
             </Button>
             <Suspense
