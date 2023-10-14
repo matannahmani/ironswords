@@ -132,7 +132,7 @@ export const operators = mysqlTable(
   {
     operator_id: int("operator_id").autoincrement().primaryKey(),
     name: varchar("name", { length: 255 }),
-    user_id: varchar("user_id", { length: 255 }),
+    user_id: varchar("user_id", { length: 255 }).unique(),
     phone: varchar("phone", { length: 255 }),
     email: varchar("email", { length: 255 }),
     contact_info: varchar("contact_info", { length: 255 }),

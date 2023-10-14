@@ -10,7 +10,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 
 import { env } from "@/env.mjs";
 import { db } from "@/server/db";
-import { mysqlTable } from "@/server/db/schema";
+import { mysqlTable, users } from "@/server/db/schema";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -24,7 +24,8 @@ declare module "next-auth" {
       id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    } & DefaultSession["user"] &
+      typeof users.$inferSelect;
   }
 
   // interface User {
