@@ -12,6 +12,7 @@ export const env = createEnv({
       .default("development"),
     DATABASE_HOST: z.string().min(1),
     DATABASE_USERNAME: z.string().min(1),
+    DATABASE_URL: z.string().min(1),
     DATABASE_PASSWORD: z.string().min(1),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === "production"
@@ -44,6 +45,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_HOST: process.env.DATABASE_HOST,
+    DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_USERNAME: process.env.DATABASE_USERNAME,
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
     NODE_ENV: process.env.NODE_ENV,

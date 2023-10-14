@@ -101,20 +101,28 @@ export const citys = mysqlTable("city", {
 });
 
 // Define the location table
-export const locations = mysqlTable("location", {
-  location_id: int("location_id").primaryKey().autoincrement(),
-  name: varchar("name", { length: 255 }),
-  address: varchar("address", { length: 255 }),
-  city_id: int("city_id").references(() => citys.city_id),
-  operator_id: int("operator_id"),
-});
+export const locations = mysqlTable(
+  "location",
+  {
+    location_id: int("location_id").primaryKey().autoincrement(),
+    name: varchar("name", { length: 255 }),
+    address: varchar("address", { length: 255 }),
+    city_id: int("city_id"),
+    operator_id: int("operator_id"),
+  },
+  (location) => ({
+    // indexes
+    // no foreign keys because of planetscale
+    cityIdIdx: index("cityId_idx").on(location.city_id),
+  }),
+);
 
 // define location operator join table
 export const locationOperators = mysqlTable(
   "location_operator",
   {
-    location_id: int("location_id").references(() => locations.location_id),
-    operator_id: int("operator_id").references(() => operators.operator_id),
+    location_id: int("location_id"),
+    operator_id: int("operator_id"),
     role: mysqlEnum("role", ["Admin", "Operator"]),
   },
   (locationOperator) => ({
@@ -143,7 +151,7 @@ export const tickets = mysqlTable(
   "tickets",
   {
     ticket_id: int("ticket_id").primaryKey().autoincrement(),
-    location_id: int("location_id").references(() => locations.location_id),
+    location_id: int("location_id"),
     title: varchar("title", { length: 255 }),
     description: text("description"),
     priority: mysqlEnum("priority", ["Low", "Medium", "High", "Urgent"]),
@@ -183,8 +191,8 @@ export const ticketResponses = mysqlTable(
   "ticket_responses",
   {
     response_id: int("response_id").primaryKey().autoincrement(),
-    ticket_id: int("ticket_id").references(() => tickets.ticket_id),
-    user_id: int("user_id").references(() => operators.operator_id),
+    ticket_id: int("ticket_id"),
+    user_id: int("user_id"),
     content: text("message"),
     is_requesting_transportion: boolean("is_requesting_transportion"),
     is_client_done: boolean("is_client_done"),
@@ -211,7 +219,7 @@ export const Warehouses = mysqlTable(
   {
     warehouse_id: int("warehouse_id").primaryKey().autoincrement(),
     name: varchar("name", { length: 255 }),
-    city_id: int("city_id").references(() => citys.city_id),
+    city_id: int("city_id"),
   },
   (warehouse) => ({
     // indexes
@@ -230,8 +238,8 @@ export const Items = mysqlTable(
   "items",
   {
     item_id: int("item_id").primaryKey().autoincrement(),
-    warehouse_id: int("warehouse_id").references(() => Warehouses.warehouse_id),
-    category_id: int("category_id").references(() => Categories.category_id),
+    warehouse_id: int("warehouse_id"),
+    category_id: int("category_id"),
     name: varchar("name", { length: 255 }),
     quantity: int("quantity"),
     stock: mysqlEnum("stock", ["none", "low", "medium", "high"]),
