@@ -128,3 +128,46 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Protected Operator procedure
+ * if you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
+ * the session is valid and guarantees `ctx.session.user` is not null.
+ * And additionally checks if the user is an operator
+ */
+export const operatorProcedure = protectedProcedure.use(
+  async ({ ctx, next }) => {
+    const operator = await ctx.db.query.operators.findFirst({
+      where: (tb, op) => op.eq(tb.user_id, ctx.session.user?.id),
+      with: {
+        locationOperators: {
+          with: {
+            location: true,
+          },
+        },
+      },
+    });
+    if (!operator ?? !operator?.locationOperators.length) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next({
+      ctx: {
+        // infers the `session` as non-nullable
+        session: { ...ctx.session, user: ctx.session.user, operator },
+      },
+    });
+  },
+);
+
+/**
+ * Protected Admin procedure
+ * if you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
+ * the session is valid and guarantees `ctx.session.user` is not null.
+ * And additionally checks if the user is an admin
+ */
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  if (ctx.session.user.role !== "ADMIN") {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next();
+});

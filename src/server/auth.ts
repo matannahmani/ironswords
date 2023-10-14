@@ -5,10 +5,12 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 
 import { env } from "@/env.mjs";
 import { db } from "@/server/db";
-import { mysqlTable } from "@/server/db/schema";
+import { mysqlTable, users } from "@/server/db/schema";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -22,7 +24,8 @@ declare module "next-auth" {
       id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    } & DefaultSession["user"] &
+      typeof users.$inferSelect;
   }
 
   // interface User {
@@ -48,9 +51,9 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: DrizzleAdapter(db, mysqlTable),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     /**
      * ...add more providers here.

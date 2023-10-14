@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "e6bad046-846f-4c20-b4b6-0fe3cd81b289",
+  "id": "6de04ea5-8f6b-4488-8e81-8bc84ad3118f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "ironswords_account": {
@@ -111,10 +111,10 @@
       "columns": {
         "category_id": {
           "name": "category_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",
@@ -141,10 +141,10 @@
       "columns": {
         "city_id": {
           "name": "city_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",
@@ -171,10 +171,10 @@
       "columns": {
         "item_id": {
           "name": "item_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "warehouse_id": {
           "name": "warehouse_id",
@@ -319,10 +319,10 @@
       "columns": {
         "location_id": {
           "name": "location_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",
@@ -378,13 +378,20 @@
       "columns": {
         "operator_id": {
           "name": "operator_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,
@@ -412,7 +419,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {
         "ironswords_operator_operator_id": {
@@ -422,7 +437,14 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "ironswords_operator_user_id_unique": {
+          "name": "ironswords_operator_user_id_unique",
+          "columns": [
+            "user_id"
+          ]
+        }
+      }
     },
     "ironswords_session": {
       "name": "ironswords_session",
@@ -474,10 +496,10 @@
       "columns": {
         "response_id": {
           "name": "response_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "ticket_id": {
           "name": "ticket_id",
@@ -582,13 +604,20 @@
       "columns": {
         "ticket_id": {
           "name": "ticket_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "location_id": {
           "name": "location_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "operator_id": {
+          "name": "operator_id",
           "type": "int",
           "primaryKey": false,
           "notNull": false,
@@ -610,14 +639,14 @@
         },
         "priority": {
           "name": "priority",
-          "type": "enum('Low','Medium','High','Urgent')",
+          "type": "enum('LOW','MID','HIGH','URGENT')",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "status": {
           "name": "status",
-          "type": "enum('Open','Completed')",
+          "type": "enum('OPEN','CLOSED','ASSIGNED')",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -670,6 +699,13 @@
           "name": "deadline_idx",
           "columns": [
             "deadline"
+          ],
+          "isUnique": false
+        },
+        "operatorId_idx": {
+          "name": "operatorId_idx",
+          "columns": [
+            "operator_id"
           ],
           "isUnique": false
         },
@@ -827,10 +863,10 @@
       "columns": {
         "warehouse_id": {
           "name": "warehouse_id",
-          "type": "int",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",

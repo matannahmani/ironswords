@@ -12,6 +12,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
+import { nanoid } from "nanoid";
 import { type AdapterAccount } from "next-auth/adapters";
 
 /**
@@ -33,10 +34,6 @@ export const users = mysqlTable("user", {
   role: mysqlEnum("role", ["USER", "ADMIN"]).default("USER"),
   image: varchar("image", { length: 255 }),
 });
-
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-}));
 
 export const accounts = mysqlTable(
   "account",
@@ -61,10 +58,6 @@ export const accounts = mysqlTable(
   }),
 );
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}));
-
 export const sessions = mysqlTable(
   "session",
   {
@@ -79,10 +72,6 @@ export const sessions = mysqlTable(
   }),
 );
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}));
-
 export const verificationTokens = mysqlTable(
   "verificationToken",
   {
@@ -96,7 +85,9 @@ export const verificationTokens = mysqlTable(
 );
 
 export const citys = mysqlTable("city", {
-  city_id: int("city_id").autoincrement().primaryKey(),
+  city_id: varchar("city_id", { length: 128 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
   name: varchar("name", { length: 255 }),
 });
 
@@ -104,11 +95,12 @@ export const citys = mysqlTable("city", {
 export const locations = mysqlTable(
   "location",
   {
-    location_id: int("location_id").autoincrement().primaryKey(),
+    location_id: varchar("location_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
     name: varchar("name", { length: 255 }),
     address: varchar("address", { length: 255 }),
-    city_id: int("city_id"),
-    operator_id: int("operator_id"),
+    city_id: varchar("city_id", { length: 128 }),
   },
   (location) => ({
     // indexes
@@ -121,15 +113,16 @@ export const locations = mysqlTable(
 export const locationOperators = mysqlTable(
   "location_operator",
   {
-    location_id: int("location_id"),
-    operator_id: int("operator_id"),
+    location_id: varchar("location_id", { length: 128 }),
+    operator_id: varchar("operator_id", { length: 128 }),
     role: mysqlEnum("role", ["Admin", "Operator"]),
   },
   (locationOperator) => ({
     // indexes
-    locationOperatorCompoundKey: primaryKey({
-      columns: [locationOperator.location_id, locationOperator.operator_id],
-    }),
+    locationOperatorCompoundKey: primaryKey(
+      locationOperator.location_id,
+      locationOperator.operator_id,
+    ),
     locationOperatorLocationIdIdx: index("locationOperatorLocationId_idx").on(
       locationOperator.location_id,
     ),
@@ -137,24 +130,37 @@ export const locationOperators = mysqlTable(
 );
 
 // Define the Operators table
-export const operators = mysqlTable("operator", {
-  operator_id: int("operator_id").autoincrement().primaryKey(),
-  name: varchar("name", { length: 255 }),
-  phone: varchar("phone", { length: 255 }),
-  email: varchar("email", { length: 255 }),
-  contact_info: varchar("contact_info", { length: 255 }),
-});
+export const operators = mysqlTable(
+  "operator",
+  {
+    operator_id: varchar("operator_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
+    name: varchar("name", { length: 255 }),
+    user_id: varchar("user_id", { length: 255 }).unique(),
+    phone: varchar("phone", { length: 255 }),
+    email: varchar("email", { length: 255 }),
+    contact_info: varchar("contact_info", { length: 255 }),
+  },
+  (operator) => ({
+    // indexes
+    userIdIdx: index("userId_idx").on(operator.user_id),
+  }),
+);
 
 // Define the Tickets table
 export const tickets = mysqlTable(
   "ticket",
   {
-    ticket_id: int("ticket_id").autoincrement().primaryKey(),
-    location_id: int("location_id"),
+    ticket_id: varchar("ticket_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
+    location_id: varchar("location_id", { length: 128 }),
+    operator_id: varchar("operator_id", { length: 128 }),
     title: varchar("title", { length: 255 }),
     description: text("description"),
-    priority: mysqlEnum("priority", ["Low", "Medium", "High", "Urgent"]),
-    status: mysqlEnum("status", ["Open", "Completed"]),
+    priority: mysqlEnum("priority", ["LOW", "MID", "HIGH", "URGENT"]),
+    status: mysqlEnum("status", ["OPEN", "CLOSED", "ASSIGNED"]),
     deadline: datetime("deadline"),
     created_at: datetime("created_at"),
     updated_at: datetime("updated_at"),
@@ -165,6 +171,7 @@ export const tickets = mysqlTable(
     priotityIdx: index("priotity_idx").on(ticket.priority),
     statusIdx: index("status_idx").on(ticket.status),
     deadlineIdx: index("deadline_idx").on(ticket.deadline),
+    operatorIdIdx: index("operatorId_idx").on(ticket.operator_id),
     createdAtIdx: index("createdAt_idx").on(ticket.created_at),
     locationIdPriorityIdx: index("locationIdPriority_idx").on(
       ticket.location_id,
@@ -189,9 +196,11 @@ export const tickets = mysqlTable(
 export const ticketResponses = mysqlTable(
   "ticket_response",
   {
-    response_id: int("response_id").autoincrement().primaryKey(),
-    ticket_id: int("ticket_id"),
-    user_id: int("user_id"),
+    response_id: varchar("response_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
+    ticket_id: varchar("ticket_id", { length: 128 }),
+    user_id: varchar("user_id", { length: 128 }),
     content: text("message"),
     is_requesting_transportion: boolean("is_requesting_transportion"),
     is_client_done: boolean("is_client_done"),
@@ -216,7 +225,9 @@ export const ticketResponses = mysqlTable(
 export const warehouses = mysqlTable(
   "warehouse",
   {
-    warehouse_id: int("warehouse_id").autoincrement().primaryKey(),
+    warehouse_id: varchar("warehouse_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
     name: varchar("name", { length: 255 }),
     city_id: int("city_id"),
   },
@@ -228,7 +239,9 @@ export const warehouses = mysqlTable(
 
 // Define the Categories table
 export const categories = mysqlTable("categorie", {
-  category_id: int("category_id").autoincrement().primaryKey(),
+  category_id: varchar("category_id", { length: 128 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
   name: varchar("name", { length: 255 }),
 });
 
@@ -236,7 +249,9 @@ export const categories = mysqlTable("categorie", {
 export const items = mysqlTable(
   "item",
   {
-    item_id: int("item_id").autoincrement().primaryKey(),
+    item_id: varchar("item_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
     warehouse_id: int("warehouse_id"),
     category_id: int("category_id"),
     name: varchar("name", { length: 255 }),
@@ -254,5 +269,122 @@ export const items = mysqlTable(
       item.warehouse_id,
       item.category_id,
     ),
+  }),
+);
+
+export const itemsRelations = relations(items, ({ one }) => ({
+  category: one(categories, {
+    fields: [items.category_id],
+    references: [categories.category_id],
+  }),
+  warehouse: one(warehouses, {
+    fields: [items.warehouse_id],
+    references: [warehouses.warehouse_id],
+  }),
+}));
+
+export const categoryRelations = relations(categories, ({ many }) => ({
+  items: many(items),
+}));
+
+export const warehouseRelations = relations(warehouses, ({ many, one }) => ({
+  items: many(items),
+  city: one(citys, {
+    fields: [warehouses.city_id],
+    references: [citys.city_id],
+  }),
+}));
+
+export const ticketRelations = relations(tickets, ({ many, one }) => ({
+  ticketResponses: many(ticketResponses),
+  operator: one(operators, {
+    fields: [tickets.operator_id],
+    references: [operators.operator_id],
+  }),
+  location: one(locations, {
+    fields: [tickets.location_id],
+    references: [locations.location_id],
+  }),
+}));
+
+export const ticketResponseRelations = relations(
+  ticketResponses,
+  ({ one }) => ({
+    ticket: one(tickets, {
+      fields: [ticketResponses.ticket_id],
+      references: [tickets.ticket_id],
+    }),
+    user: one(users, {
+      fields: [ticketResponses.user_id],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const locationRelations = relations(locations, ({ many, one }) => ({
+  tickets: many(tickets),
+  locationOperators: many(locationOperators),
+  city: one(citys, {
+    fields: [locations.city_id],
+    references: [citys.city_id],
+  }),
+}));
+
+export const operatorRelations = relations(operators, ({ many, one }) => ({
+  locationOperators: many(locationOperators),
+  tickets: many(tickets),
+  user: one(users, {
+    fields: [operators.user_id],
+    references: [users.id],
+  }),
+}));
+
+export const cityRelations = relations(citys, ({ many }) => ({
+  locations: many(locations),
+  warehouses: many(warehouses),
+}));
+
+export const locationOperatorRelations = relations(
+  locationOperators,
+  ({ one }) => ({
+    location: one(locations, {
+      fields: [locationOperators.location_id],
+      references: [locations.location_id],
+    }),
+    operator: one(operators, {
+      fields: [locationOperators.operator_id],
+      references: [operators.operator_id],
+    }),
+  }),
+);
+
+export const userRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions),
+  operators: many(operators),
+  ticketResponses: many(ticketResponses),
+}));
+
+export const accountRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const sessionRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
+
+export const verificationTokenRelations = relations(
+  verificationTokens,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [verificationTokens.identifier],
+      references: [users.id],
+    }),
   }),
 );
