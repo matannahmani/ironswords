@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
 /**
  * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
  * 1. You want to modify request context (see Part 1).
@@ -107,14 +110,21 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+  const user = await ctx.db.query.users.findFirst({
+    where: (tb, op) => op.eq(tb.id, ctx?.session?.user?.id ?? "_"),
+  });
+  if (!user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...ctx.session, user: { ...ctx.session.user, ...user } },
     },
   });
 });
@@ -138,7 +148,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 export const operatorProcedure = protectedProcedure.use(
   async ({ ctx, next }) => {
     const operator = await ctx.db.query.operators.findFirst({
-      where: (tb, op) => op.eq(tb.user_id, ctx.session.user?.id),
+      where: (tb, op) => op.eq(tb.user_id, ctx?.session?.user?.id ?? "_"),
       with: {
         locationOperators: {
           with: {

@@ -13,6 +13,19 @@ import { Link } from "lucide-react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+const setClientSideCookie = (name: string, value: string) => {
+  document.cookie = `${name}=${value}; path=/`;
+};
+
+export const SelectLocationWrapper: React.FC<{
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}> = ({ children, fallback }) => {
+  const pathname = usePathname();
+  if (!pathname.includes("operators")) return fallback ?? null;
+  return <>{children}</>;
+};
+
 export const SelectLocations: React.FC<{
   locations: RouterOutputs["user"]["myLocations"]["locations"];
 }> = ({ locations }) => {
@@ -25,11 +38,13 @@ export const SelectLocations: React.FC<{
     if (!pathname.includes("operators")) return;
     if (value === "" && locationId) {
       setValue(locationId);
+      setClientSideCookie("location_id", locationId);
       return;
     }
     if (locationId !== value) {
       const newParams = new URLSearchParams(searchParams);
       newParams.set("location_id", value);
+      setClientSideCookie("location_id", value);
       router.push(`${pathname}?${newParams.toString()}`);
     }
   }, [searchParams, pathname]);
@@ -45,7 +60,7 @@ export const SelectLocations: React.FC<{
       }}
     >
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="בחר מיקום" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

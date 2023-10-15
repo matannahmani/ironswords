@@ -63,7 +63,7 @@
     "lucide-react": "^0.287.0",
     "nanoid": "^5.0.1",
     "next": "^13.4.19",
-    "next-auth": "^4.23.0",
+    "next-auth": "experimental",
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-day-picker": "^8.8.2",
@@ -73,6 +73,7 @@
     "superjson": "^1.13.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^2.9.1",
     "zod": "latest"
   },
   "devDependencies": {

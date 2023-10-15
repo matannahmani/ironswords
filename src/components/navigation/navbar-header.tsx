@@ -5,6 +5,7 @@ import {
   Cloud,
   CreditCard,
   Github,
+  History,
   Keyboard,
   LifeBuoy,
   LogOut,
@@ -48,7 +49,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { SelectLocations } from "./select-locations";
+import { SelectLocationWrapper, SelectLocations } from "./select-locations";
+import { headers } from "next/headers";
 
 const LoginOrAvatar = async () => {
   const { session } = await api.user.whoami.query();
@@ -71,22 +73,34 @@ const LoginOrAvatar = async () => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              
+              {/* My Account */}
+              החשבון שלי
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <span>
+                  {/* Profile */}
+                  פרופיל
+                </span>
                 <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
-                <CreditCard className="mr-2 h-4 w-4" />
-                <span>History</span>
+                <History className="mr-2 h-4 w-4" />
+                <span>
+                  {/* History */}
+                  היסטוריה
+                </span>
                 <DropdownMenuShortcut>⌘H</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
                 <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+                <span>
+                הגדרות
+                </span>
                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -94,7 +108,9 @@ const LoginOrAvatar = async () => {
             <DropdownMenuItem asChild>
               <Link href="/api/auth/signout">
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
+                <span>
+                  התנתק
+                </span>
                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
               </Link>
             </DropdownMenuItem>
@@ -105,7 +121,7 @@ const LoginOrAvatar = async () => {
 
   return (
     <Link href="/login" className={buttonVariants({ size: "sm" })}>
-      Login
+      התחבר
     </Link>
   );
 };
@@ -115,7 +131,7 @@ const SelectLocation = async () => {
     const { locations } = await api.user.myLocations.query();
     return <SelectLocations locations={locations} />;
   } catch (err) {
-    return <span className="font-semibold">Call Center</span>;
+    return <span className="font-semibold">מרכז פניות</span>;
   }
 };
 
@@ -131,11 +147,15 @@ export default function NavbarHeader() {
                 "my-auto hidden self-center text-lg font-semibold md:block",
               )}
             >
-              <Suspense
-                fallback={<span className="font-semibold">Call Center</span>}
+              <SelectLocationWrapper
+                fallback={<span className="font-semibold">מרכז פניות</span>}
               >
-                <SelectLocation />
-              </Suspense>
+                <Suspense
+                  fallback={<span className="font-semibold">מרכז פניות</span>}
+                >
+                  <SelectLocation />
+                </Suspense>
+              </SelectLocationWrapper>
             </div>
           </div>
           <div className="flex items-center justify-between gap-4 self-stretch">

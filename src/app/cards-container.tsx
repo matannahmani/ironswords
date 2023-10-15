@@ -25,7 +25,10 @@ const CardsContainer: React.FC<{
   };
   return (
     <>
-      <div className="flex flex-row flex-wrap gap-4" ref={parent}>
+      <div
+        className="mt-auto flex flex-1 flex-row flex-wrap gap-4"
+        ref={parent}
+      >
         {children}
       </div>
       <div className="flex flex-row justify-end gap-2">
@@ -34,10 +37,12 @@ const CardsContainer: React.FC<{
           onClick={() => handlePageMove("previous")}
           variant="outline"
         >
-          Previous Page
+          {/* Previous Page */}
+          עמוד קודם
         </Button>
         <Button disabled={!hasNextPage} onClick={() => handlePageMove("next")}>
-          Next Page
+          {/* Next Page */}
+          עמוד הבא
         </Button>
       </div>
     </>

@@ -40,6 +40,9 @@ export const locationRouter = createTRPCRouter({
       where: (tb, op) => op.eq(tb.location_id, input),
     });
   }),
+  myLocations: operatorProcedure.query(({ ctx }) => {
+    return ctx.session.operator.locationOperators;
+  }),
   tickets: operatorProcedure
     .input(getLocationTicketsSchema)
     .query(async ({ ctx, input }) => {
@@ -64,13 +67,14 @@ export const locationRouter = createTRPCRouter({
         .execute();
       const pageP = ctx.db.query.tickets.findMany({
         where: (tb, op) => filters,
-        offset: input.offset,
+        offset: input.offset * input.limit,
         limit: input.limit,
       });
       const [total, page] = await Promise.all([totalP, pageP]);
       return {
-        total: total?.[0]?.count ?? 0,
+        total: Number(total?.[0]?.count ?? 0),
         page,
+        totalPages: Math.ceil((total?.[0]?.count ?? 0) / input.limit),
       };
     }),
   addOperator: adminProcedure

@@ -15,6 +15,8 @@ export const userRouter = createTRPCRouter({
   }),
   myLocations: operatorProcedure.query(({ ctx }) => {
     return {
+      operator: ctx.session.operator,
+      user: ctx.session.user,
       locations: ctx.session.operator.locationOperators,
     };
   }),

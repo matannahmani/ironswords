@@ -22,17 +22,18 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  const selectedLength = table.getSelectedRowModel().rows.length;
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
-        {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected. */}
-        {`${table.getFilteredRowModel().rows.length} רשומות מתוך ${
-          table.getRowModel().rows.length
-        } נבחרו`}
+        {selectedLength > 1
+          ? `נבחרו ${selectedLength} רשומות`
+          : selectedLength === 1
+          ? `נבחרה רשומה אחת`
+          : `לא נבחרו רשומות`}
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-6 lg:gap-x-8">
+        <div className="flex items-center gap-x-2">
           <p className="text-sm font-medium">רשומות בעמוד:</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
@@ -54,9 +55,12 @@ export function DataTablePagination<TData>({
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
           עמוד {table.getState().pagination.pageIndex + 1} מתוך{" "}
-          {table.getPageCount() + 1}
+          {table.getPageCount()}
         </div>
-        <div className="flex items-center space-x-2">
+        <div
+          style={{ direction: "ltr" }}
+          className="flex flex-row-reverse items-center gap-x-2"
+        >
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"

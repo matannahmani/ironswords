@@ -8,7 +8,7 @@ import { type RowData, type ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@ui/badge";
 import { Checkbox } from "@ui/checkbox";
 
-import { labels, priorities, statuses } from "../data/data";
+import { labels, ticketPriority, ticketStatus } from "../data/data";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { type RouterOutputs } from "@/trpc/shared";
@@ -35,7 +35,7 @@ export const columns: ColumnDef<
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
-        className="translate-y-[2px]"
+        className="ms-4 translate-y-[2px]"
       />
     ),
     enableSorting: false,
@@ -81,7 +81,7 @@ export const columns: ColumnDef<
       <DataTableColumnHeader column={column} title="סטטוס פנייה" />
     ),
     cell: ({ row }) => {
-      const status = statuses.find(
+      const status = ticketStatus.find(
         (status) => status.value === row.getValue("status"),
       );
 
@@ -92,7 +92,7 @@ export const columns: ColumnDef<
       return (
         <div className="flex w-[100px] items-center">
           {status.icon && (
-            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            <status.icon className="me-2  h-4 w-4 text-muted-foreground" />
           )}
           <span>{status.label}</span>
         </div>
@@ -111,7 +111,7 @@ export const columns: ColumnDef<
       <DataTableColumnHeader column={column} title="חשיבות פנייה" />
     ),
     cell: ({ row }) => {
-      const priority = priorities.find(
+      const priority = ticketPriority.find(
         (priority) => priority.value === row.getValue("priority"),
       );
 
@@ -122,7 +122,7 @@ export const columns: ColumnDef<
       return (
         <div className="flex items-center">
           {priority.icon && (
-            <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            <priority.icon className="me-2  h-4 w-4 text-muted-foreground" />
           )}
           <span>{priority.label}</span>
         </div>

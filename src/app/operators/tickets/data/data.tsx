@@ -1,3 +1,4 @@
+import { type tickets } from "@/server/db/schema";
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -25,10 +26,18 @@ export const labels = [
   },
 ];
 
-export const statuses = [
+type dataPoint<T extends string> = {
+  label: string;
+  value: T;
+  icon?: React.ComponentType<{ className?: string }>;
+}[];
+
+export const ticketStatus: dataPoint<
+  NonNullable<typeof tickets.$inferSelect.status>
+> = [
   {
     label: "טופל",
-    value: "DONE",
+    value: "CLOSED",
     icon: CheckCircledIcon,
   },
   {
@@ -38,30 +47,32 @@ export const statuses = [
   },
   {
     label: "בתהליך",
-    value: "IN PROGRESS",
+    value: "ASSIGNED",
     icon: StopwatchIcon,
   },
 ];
 
-export const priorities = [
+export const ticketPriority: dataPoint<
+  NonNullable<typeof tickets.$inferSelect.priority>
+> = [
   {
     label: "לא דחוף",
-    value: "low",
+    value: "LOW",
     icon: ArrowDownIcon,
   },
   {
     label: "בינוני",
-    value: "medium",
+    value: "MID",
     icon: ArrowRightIcon,
   },
   {
     label: "דחוף",
-    value: "high",
+    value: "HIGH",
     icon: ArrowUpIcon,
   },
   {
     label: "דחוף ביותר",
-    value: "urgent",
+    value: "URGENT",
     icon: AlertTriangle,
   },
 ];

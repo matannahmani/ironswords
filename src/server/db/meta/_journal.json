@@ -15,6 +15,13 @@
       "when": 1697314012660,
       "tag": "0001_red_fenris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1697346720643,
+      "tag": "0002_rare_katie_power",
+      "breakpoints": true
     }
   ]
 }
