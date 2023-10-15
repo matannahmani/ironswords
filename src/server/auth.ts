@@ -35,16 +35,8 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
-  },
   adapter: DrizzleAdapter(db, mysqlTable),
+  callbacks: {},
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -60,6 +52,9 @@ export const authConfig = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  // session: {
+  //   strategy: "jwt",
+  // },
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

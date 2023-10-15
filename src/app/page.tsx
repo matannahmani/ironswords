@@ -28,7 +28,7 @@ export default async function Home({
   const data = await api.city.tickets.query({
     limit: 10,
     offset,
-    city_id: "_",
+    city_id: "66rnmiNulGHzRz_qKLTeW",
     priority:
       Array.isArray(searchParams.priority) && searchParams.priority.length > 0
         ? (searchParams.priority as RouterInputs["city"]["tickets"]["priority"])

@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RequestCard } from "@/components/cards/request-card";
+import { auth } from "@/server/auth";
 export const metadata: Metadata = {
   title: "Tickets",
   description: "Track all your call requests",
@@ -36,11 +37,9 @@ export default async function TicketsPage({
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const cookiesJar = cookies();
-
   const fetchInput = getLocationTicketsSchema.safeParse({
-    limit: 10,
-    offset: 1,
+    limit: Number(searchParams.limit) || 10,
+    offset: Number(searchParams.offset) || 0,
     ...searchParams,
   });
 
@@ -54,8 +53,11 @@ export default async function TicketsPage({
       </div>
     );
   }
-  const data = await api.location.tickets.query(fetchInput.data);
 
+  const dataP = api.location.tickets.query(fetchInput.data);
+
+  const meP = api.user.myLocations.query();
+  const [data, me] = await Promise.all([dataP, meP]);
   return (
     <>
       <div className="flex h-full flex-1 flex-col space-y-4 p-4  md:space-y-8 md:p-8">
@@ -74,12 +76,30 @@ export default async function TicketsPage({
                 <Button className="">פתיחת פנייה</Button>
               </DialogTrigger>
               <DialogContent className="w-[90vw] sm:max-w-[425px]">
-                <RequestCard />
+                <RequestCard
+                  operator_id={me.operator.operator_id}
+                  location_id={fetchInput.data.location_id}
+                  city_id={
+                    me.locations.find(
+                      (l) => l.location_id === fetchInput.data.location_id,
+                    )?.location?.city_id ?? "_"
+                  }
+                />
               </DialogContent>
             </Dialog>
           </div>
         </div>
-        <DataTable data={data.page ?? []} columns={columns} />
+        <DataTable
+          initalPage={{
+            pageSize: fetchInput.data.limit,
+            pageIndex: fetchInput.data.offset,
+          }}
+          initalFilters={{
+            location_id: fetchInput.data.location_id,
+          }}
+          data={data}
+          columns={columns}
+        />
       </div>
     </>
   );

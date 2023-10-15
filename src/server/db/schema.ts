@@ -13,7 +13,6 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 import { nanoid } from "nanoid";
-import { type AdapterAccount } from "next-auth/adapters";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -40,7 +39,7 @@ export const accounts = mysqlTable(
   {
     userId: varchar("userId", { length: 255 }).notNull(),
     type: varchar("type", { length: 255 })
-      .$type<AdapterAccount["type"]>()
+      // .$type<AdapterAccount["type"]>()
       .notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
     providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
@@ -155,13 +154,15 @@ export const tickets = mysqlTable(
     ticket_id: varchar("ticket_id", { length: 128 })
       .$defaultFn(() => nanoid())
       .primaryKey(),
-    location_id: varchar("location_id", { length: 128 }),
-    operator_id: varchar("operator_id", { length: 128 }),
-    city_id: varchar("city_id", { length: 128 }),
-    title: varchar("title", { length: 255 }),
+    location_id: varchar("location_id", { length: 128 }).notNull(),
+    operator_id: varchar("operator_id", { length: 128 }).notNull(),
+    city_id: varchar("city_id", { length: 128 }).notNull(),
+    title: varchar("title", { length: 255 }).notNull(),
     description: text("description"),
     priority: mysqlEnum("priority", ["LOW", "MID", "HIGH", "URGENT"]),
-    status: mysqlEnum("status", ["OPEN", "CLOSED", "ASSIGNED"]),
+    status: mysqlEnum("status", ["OPEN", "CLOSED", "ASSIGNED"]).$default(
+      () => "OPEN",
+    ),
     deadline: datetime("deadline"),
     created_at: datetime("created_at"),
     updated_at: datetime("updated_at"),

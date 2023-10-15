@@ -42,7 +42,7 @@ export const RequestCallCard: React.FC<{
 }> = ({ title, description, id, urgency, status, date }) => {
   return (
     <ClientWrapper key={"wrapper-" + id}>
-      <Card className="flex min-w-[280px] flex-1 grow flex-col sm:basis-1/3 xl:basis-1/4">
+      <Card className="flex min-w-[280px] max-w-[340px] flex-1 grow flex-col self-start sm:basis-1/3 xl:basis-1/4">
         <CardHeader className="flex flex-row flex-wrap items-start gap-4 space-y-0">
           <div className="flex-0 grow basis-0 flex-col space-y-1">
             <CardTitle className="text-lg sm:text-xl">{title}</CardTitle>

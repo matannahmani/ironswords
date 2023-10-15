@@ -52,7 +52,7 @@ export const cityRouter = createTRPCRouter({
       });
       return locations;
     }),
-  tickets: operatorProcedure
+  tickets: publicProcedure
     .input(
       getLocationTicketsSchema
         .pick({
@@ -81,7 +81,7 @@ export const cityRouter = createTRPCRouter({
         .execute();
       const pageP = ctx.db.query.tickets.findMany({
         where: (tb, op) => filters,
-        offset: input.offset,
+        offset: (input.offset - 1) * input.limit,
         limit: input.limit,
       });
       const [total, page] = await Promise.all([totalP, pageP]);

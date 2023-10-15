@@ -138,7 +138,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 export const operatorProcedure = protectedProcedure.use(
   async ({ ctx, next }) => {
     const operator = await ctx.db.query.operators.findFirst({
-      where: (tb, op) => op.eq(tb.user_id, ctx.session.user?.id),
+      where: (tb, op) => op.eq(tb.user_id, ctx?.session?.user?.id ?? "_"),
       with: {
         locationOperators: {
           with: {
