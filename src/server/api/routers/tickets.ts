@@ -98,7 +98,23 @@ export const ticketsRouter = createTRPCRouter({
   }),
   getOne: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return await ctx.db.query.tickets.findFirst({
-      where: (tb, op) => op.eq(tb.location_id, input),
+      where: (tb, op) => op.eq(tb.ticket_id, input),
+      with: {
+        operator: true,
+      },
+    });
+  }),
+  myPersoanlTickets: protectedProcedure.query(async ({ ctx, input }) => {
+    return await ctx.db.query.ticketResponses.findMany({
+      where: (tb, op) => op.eq(tb.user_id, ctx.session.user.id),
+
+      with: {
+        ticket: {
+          with: {
+            operator: true,
+          },
+        },
+      },
     });
   }),
   acceptTicket: protectedProcedure

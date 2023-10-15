@@ -80,7 +80,9 @@ export function RequestTakeCard({
               <Button
                 disabled={session.status === "loading" || !!session.data}
                 onClick={() => {
-                  void signIn("google");
+                  void signIn("google", {
+                    callbackUrl: `${window.location.origin}/?ticket_id=${ticketId}`,
+                  });
                 }}
                 variant="outline"
                 className="flex-start w-fit items-center justify-start"

@@ -16,6 +16,8 @@ import { TicketsFilter } from "@/components/filters/tickets-filter";
 import { RouterInputs } from "@/trpc/shared";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { RequestCallCard } from "@/components/cards/request-call-card";
 // array of numbers 1-50
 const array50 = Array.from(Array(50).keys()).map((i) => ({ id: i + 1 }));
 
@@ -35,81 +37,78 @@ const RenderCards = async () => {
   );
 };
 
+const TicketModal = async ({ ticket_id }: { ticket_id?: string }) => {
+  if (!ticket_id) return null;
+  const data = await api.tickets.getOne.query(ticket_id);
+  if (!data) return null;
+
+  return (
+    <Dialog defaultOpen={true}>
+      <DialogContent className="!w-fit">
+        <RequestCallCard
+          id={data.ticket_id}
+          urgency={data.priority}
+          date={
+            data.created_at?.toLocaleDateString("he-IL", {
+              day: "numeric",
+              month: "numeric",
+              year: "numeric",
+            }) || ""
+          }
+          {...data}
+          description={data.description ?? ""}
+          urgencyLabel={priotityToHE(data.priority ?? "LOW").label}
+          statusLabel={statusToHE(data.status ?? "OPEN")?.label ?? "פתוחה"}
+          className="border-none"
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default async function Home({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const offset = parseInt(searchParams.page as string) || 1;
-
   return (
-    // <div className="container flex flex-1 grow flex-col gap-4 py-4 md:py-8">
-    //   <div className="flex flex-col gap-2">
-    //     <Badge className="w-fit font-semibold">דרגת דחיפות</Badge>
-    //     <SearchFilter
-    //       label="דרגת דחיפות"
-    //       paramName="urgency"
-    //       items={[
-    //         ...tickets.priority.enumValues.map((value) => {
-    //           const labelData = priotityToHE(value);
-    //           return {
-    //             value: value,
-    //             label: labelData.label,
-    //             color: labelData.color,
-    //           };
-    //         }),
-    //       ]}
-    //     />
-    //   </div>
-    //   <div className="flex flex-1 flex-col gap-4">
-    //     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-    //       {/* On Going Requests */}
-    //       פניות פתוחות
-    //     </h4>
-    //     <CardsContainer
-    //       hasNextPage={data.hasNextPage}
-    //       hasPreviousPage={data.hasPreviousPage}
-    //     >
-    //       {data.page.map((row, index) => (
-    //         <RequestCallCard
-    //           key={`${row.ticket_id}`}
-    //           title={row.title ?? ""}
-    //           description={row.description ?? ""}
-    //           urgency={priotityToHE(row.priority)?.label ?? "לא ידוע"}
-    //           // date="2021-09-01"
-    //           date={row.created_at?.toLocaleDateString() ?? "לא ידוע"}
-    //           status={statusToHE(row.status)?.label ?? "לא ידוע"}
-    //           id={row.ticket_id}
-    //         />
-    //       ))}
-    //     </CardsContainer>
-    //   </div>
-    // </div>
-    <div className="flex h-full flex-1 flex-col space-y-4 p-4  md:space-y-8 md:p-8">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            ברוך הבא למערכת חרבות ברזל!
-          </h2>
-          <p className="text-muted-foreground">להלן רשימת הפניות</p>
+    <>
+      <div className="flex h-full flex-1 flex-col space-y-4 p-4  md:space-y-8 md:p-8">
+        <div className="flex items-center justify-between space-y-2">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">
+              ברוך הבא למערכת חרבות ברזל!
+            </h2>
+            <p className="text-muted-foreground">להלן רשימת הפניות</p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button disabled className="">
+              שתף
+              <Share className="ms-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button disabled className="">
-            שתף
-            <Share className="ms-2 h-4 w-4" />
-          </Button>
+        <div className="flex flex-1 flex-col gap-2">
+          <TicketsFilter />
+          <Suspense
+            fallback={
+              <Loader2 className="m-auto h-8 w-8 animate-spin text-primary" />
+            }
+          >
+            <RenderCards />
+          </Suspense>
         </div>
       </div>
-      <div className="flex flex-1 flex-col gap-2">
-        <TicketsFilter />
-        <Suspense
-          fallback={
-            <Loader2 className="m-auto h-8 w-8 animate-spin text-primary" />
+      <Suspense>
+        <TicketModal
+          ticket_id={
+            typeof searchParams.ticket_id === "string"
+              ? searchParams.ticket_id
+              : undefined
           }
-        >
-          <RenderCards />
-        </Suspense>
-      </div>
-    </div>
+        />
+      </Suspense>
+    </>
   );
 }

@@ -61,6 +61,7 @@ export const RequestCallCard: React.FC<{
   status: typeof tickets.$inferSelect.status;
   statusLabel: string;
   date: string;
+  className?: string;
 }> = ({
   title,
   description,
@@ -70,11 +71,17 @@ export const RequestCallCard: React.FC<{
   date,
   urgencyLabel,
   statusLabel,
+  className,
 }) => {
   const urgencyData = priotityToHE(urgency);
   return (
     <ClientWrapper key={"wrapper-" + id}>
-      <Card className="flex min-w-[280px] max-w-[340px] flex-1 grow flex-col self-start sm:basis-1/3 xl:basis-1/4">
+      <Card
+        className={cn(
+          "flex min-w-[280px] max-w-[340px] flex-1 grow flex-col self-start sm:basis-1/3 xl:basis-1/4",
+          className,
+        )}
+      >
         <CardHeader className="flex flex-row flex-wrap items-start gap-4 gap-y-0">
           <div className="flex-0 grow basis-0 flex-col gap-y-1">
             <CardTitle className="text-lg sm:text-xl">{title}</CardTitle>

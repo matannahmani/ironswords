@@ -58,7 +58,7 @@ const CardsContainer: React.FC<{
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div
-        className="mt-auto flex flex-1 flex-row flex-wrap gap-4"
+        className="mt-auto flex flex-1 flex-row flex-wrap gap-4 py-2"
         ref={parent}
       >
         {data.page.length === 0 && (

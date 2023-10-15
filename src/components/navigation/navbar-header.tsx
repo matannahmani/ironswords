@@ -132,9 +132,9 @@ const SelectLocation = async () => {
 
 export default function NavbarHeader() {
   return (
-    <section className="sticky top-0 z-10 border-b border-border ">
-      <article className="flex w-full flex-col self-stretch bg-background px-5 py-4 shadow-[0px_4px_40px_1px_rgba(0,0,0,0.03)] max-md:max-w-full">
-        <header className="-mt-px flex w-full  items-start justify-between gap-5 self-center max-md:max-w-full max-md:flex-wrap">
+    <section className="sticky top-0 z-10 h-20 border-b border-border ">
+      <article className="flex h-full w-full flex-col self-stretch bg-background px-5 py-4 shadow-[0px_4px_40px_1px_rgba(0,0,0,0.03)] max-md:max-w-full">
+        <header className="-mt-px flex h-full w-full items-start justify-between gap-5 self-center max-md:max-w-full max-md:flex-wrap">
           <div className="my-auto flex items-start gap-3.5 self-center">
             <MobileMenuToggler />
             <div

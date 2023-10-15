@@ -57,10 +57,29 @@ export function RequestShareCard({ ticket_id }: { ticket_id: string }) {
         <div className="space-y-4">
           <h4 className="text-sm font-medium">שתף ברשתות חברתיות</h4>
           <div className="flex flex-row gap-2">
-            <Button variant="secondary" className="shrink-0">
+            <Button
+              onClick={() => {
+                window.open(
+                  `https://www.facebook.com/sharer/sharer.php?u=
+                  https://ironswords.xyz/?ticket_id=${ticket_id}`,
+                  "_blank",
+                );
+              }}
+              variant="secondary"
+              className="shrink-0"
+            >
               <SiFacebook className="h-4 w-4" />
             </Button>
-            <Button variant="secondary" className="shrink-0">
+            <Button
+              onClick={() => {
+                window.open(
+                  `https://wa.me/?text=אנחנו צריכים את עזרתך בפנייה הבאה: https://ironswords.xyz/?ticket_id=${ticket_id}`,
+                  "_blank",
+                );
+              }}
+              variant="secondary"
+              className="shrink-0"
+            >
               <SiWhatsapp className="h-4 w-4" />
             </Button>
           </div>
