@@ -1,3 +1,4 @@
+// @ts-ignore - someweird bug fix later
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth, { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
@@ -34,7 +35,7 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
   adapter: DrizzleAdapter(db, mysqlTable),
   callbacks: {},
   providers: [
@@ -55,7 +56,7 @@ export const authConfig = {
   // session: {
   //   strategy: "jwt",
   // },
-} satisfies NextAuthConfig;
+};
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
 
@@ -64,4 +65,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = auth;
+export const getServerAuthSession = async () => await auth();

@@ -1,9 +1,8 @@
 import { appRouter } from "@/server/api/root";
-import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
-import { locationOperators } from "@/server/db/schema";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { auth } from "./server/auth";
 
 const retreiveLocationId = (request: NextRequest) => {
   const locationId = request.cookies.get("location_id");
@@ -22,7 +21,7 @@ const validateLocationId = async (request: NextRequest) => {
   const appCaller = appRouter.createCaller({
     db: db,
     headers: request.headers,
-    session: await getServerAuthSession(),
+    session: await auth(),
   });
   const availableLocations = await appCaller.location
     .myLocations()
