@@ -27,13 +27,13 @@ export function ModeToggler() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          מצב בהיר
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          מצב כהה
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          מצב מערכת
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -22,15 +22,15 @@ const SidebarItem: React.FC<{
         "bg-primary/10 text-primary/90 dark:bg-primary dark:text-primary-foreground",
     )}
   >
-    <div className="mr-2.5 flex items-start gap-2.5">
-      {icon}
-      <Link
-        href={href}
-        className={cn("my-auto self-center text-base font-medium")}
-      >
+    <Link
+      href={href}
+      className={cn("my-auto w-full self-center text-base font-medium")}
+    >
+      <div className="mr-2.5 flex items-start gap-2.5">
+        {icon}
         {title}
-      </Link>
-    </div>
+      </div>
+    </Link>
   </nav>
 );
 

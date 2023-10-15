@@ -80,7 +80,7 @@ const LoginOrAvatar = async () => {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
+                <User className="me-2 h-4 w-4" />
                 <span>
                   {/* Profile */}
                   פרופיל
@@ -88,7 +88,7 @@ const LoginOrAvatar = async () => {
                 <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
-                <History className="mr-2 h-4 w-4" />
+                <History className="me-2 h-4 w-4" />
                 <span>
                   {/* History */}
                   היסטוריה
@@ -96,7 +96,7 @@ const LoginOrAvatar = async () => {
                 <DropdownMenuShortcut>⌘H</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
-                <Settings className="mr-2 h-4 w-4" />
+                <Settings className="me-2 h-4 w-4" />
                 <span>הגדרות</span>
                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
@@ -104,7 +104,7 @@ const LoginOrAvatar = async () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/api/auth/signout">
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="me-2 h-4 w-4" />
                 <span>התנתק</span>
                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
               </Link>
