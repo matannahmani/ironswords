@@ -24,7 +24,7 @@ const SocialLoginButtons: React.FC = () => {
         className="flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
       >
         <SiGoogle className="mr-2" />
-        Sign in with Google
+        התחבר עם גוגל
       </Button>
     </div>
   );
