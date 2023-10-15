@@ -11,7 +11,8 @@ import {
   ticketPriority,
   ticketStatus,
 } from "@/app/operators/tickets/data/data";
-
+import { filterAtoms } from "@/app/cards-container";
+import { useAtom } from "jotai";
 const useDebounced = ({
   value,
   key,
@@ -53,30 +54,28 @@ export const TicketsFilter: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const [state, setState] = useState({
-    title: searchParams.get("title") ?? "",
-    status: searchParams.getAll("status"),
-    priority: searchParams.getAll("priority"),
-  });
+  const [state, setState] = useAtom(filterAtoms);
   const { title, status, priority } = state;
-  useDebounced({ value: title, key: "title" });
-  useDebounced({ value: status, key: "status" });
-  useDebounced({ value: priority, key: "priority" });
-  const isFiltered = status.length > 0 ?? priority.length > 0 ?? title !== "";
+  // useDebounced({ value: title, key: "title" });
+  // useDebounced({ value: status, key: "status" });
+  // useDebounced({ value: priority, key: "priority" });
+  const isFiltered =
+    title || (status?.length ?? 0) > 0 || (priority?.length ?? 0) > 0;
   const reset = () => {
     const newParams = new URLSearchParams();
     setState({
       title: "",
       status: [],
       priority: [],
+      offset: 1,
     });
-    router.push(`${pathname}?${newParams.toString()}`);
   };
 
   const onFilterChange = (
     target: "status" | "priority" | "title",
     val: string[] | string | undefined,
   ) => {
+    if (val?.length === 0) val = undefined;
     setState((prev) => ({
       ...prev,
       [target]: val,

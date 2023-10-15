@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Share } from "lucide-react";
 import { TicketsFilter } from "@/components/filters/tickets-filter";
 import { RouterInputs } from "@/trpc/shared";
-
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 // array of numbers 1-50
 const array50 = Array.from(Array(50).keys()).map((i) => ({ id: i + 1 }));
 
@@ -29,25 +30,6 @@ export default async function Home({
     limit: 10,
     offset,
     city_id: "66rnmiNulGHzRz_qKLTeW",
-    // @ts-expect-error - fix this later
-    priority:
-      Array.isArray(searchParams.priority) && searchParams.priority.length > 0
-        ? (searchParams.priority as RouterInputs["city"]["tickets"]["priority"])
-        : typeof searchParams.priority === "string"
-        ? [
-            searchParams.priority as unknown as RouterInputs["city"]["tickets"]["priority"],
-          ]
-        : undefined,
-    // @ts-expect-error - fix this later
-    status:
-      Array.isArray(searchParams.status) && searchParams.status.length > 0
-        ? (searchParams.status as RouterInputs["city"]["tickets"]["status"])
-        : typeof searchParams.status === "string"
-        ? [
-            searchParams.status as unknown as RouterInputs["city"]["tickets"]["status"],
-          ]
-        : undefined,
-    title: searchParams.title as string | undefined,
   });
   return (
     // <div className="container flex flex-1 grow flex-col gap-4 py-4 md:py-8">
@@ -109,30 +91,26 @@ export default async function Home({
       </div>
       <div className="flex flex-1 flex-col gap-2">
         <TicketsFilter />
-        <CardsContainer
-          hasNextPage={data.hasNextPage}
-          hasPreviousPage={data.hasPreviousPage}
-        >
-          {data.page.length === 0 && (
-            <div className="m-auto flex h-64 flex-col items-center justify-center self-center">
-              <span className="text-lg font-semibold">לא נמצאו פניות</span>
+        <Suspense
+          fallback={
+            <div className="p-4">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              טוען נתונים
             </div>
-          )}
-          {data.page.map((row, index) => (
-            <RequestCallCard
-              key={`${row.ticket_id}`}
-              title={row.title ?? ""}
-              description={row.description ?? ""}
-              urgencyLabel={priotityToHE(row.priority)?.label ?? "לא ידוע"}
-              // date="2021-09-01"
-              urgency={row.priority}
-              status={row.status}
-              date={row.created_at?.toLocaleDateString() ?? "לא ידוע"}
-              statusLabel={statusToHE(row.status)?.label ?? "לא ידוע"}
-              id={row.ticket_id}
-            />
-          ))}
-        </CardsContainer>
+          }
+        >
+          <CardsContainer
+            initalData={data}
+            hasNextPage={data.hasNextPage}
+            hasPreviousPage={data.hasPreviousPage}
+          >
+            {data.page.length === 0 && (
+              <div className="m-auto flex h-64 flex-col items-center justify-center self-center">
+                <span className="text-lg font-semibold">לא נמצאו פניות</span>
+              </div>
+            )}
+          </CardsContainer>
+        </Suspense>
       </div>
     </div>
   );

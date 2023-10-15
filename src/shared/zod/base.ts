@@ -45,8 +45,8 @@ export const priotityToHE = (
       };
     case "URGENT":
       return {
-        i18n: "HIGH",
-        label: "דחיפות גבוהה",
+        i18n: "URGENT",
+        label: "דחיפות קריטית",
         color: "primary",
       };
     default:

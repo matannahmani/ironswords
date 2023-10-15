@@ -32,7 +32,8 @@ const validateLocationId = async (request: NextRequest) => {
       return [];
     });
   if (availableLocations.length === 0) {
-    return NextResponse.redirect("unauthorized");
+    url.pathname = "/unauthorized";
+    return NextResponse.redirect(url.toString());
   }
   if (
     !!searchLocationId &&

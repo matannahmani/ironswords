@@ -36,6 +36,8 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { RequestShareCard } from "./request-share-card";
 import { RequestTakeCard } from "./request-take-card";
 import { tickets } from "@/server/db/schema";
+import { ticketPriority } from "@/app/operators/tickets/data/data";
+import { priotityToHE } from "@/shared/zod/base";
 
 export const RequestCallCard: React.FC<{
   title: string;
@@ -56,6 +58,7 @@ export const RequestCallCard: React.FC<{
   urgencyLabel,
   statusLabel,
 }) => {
+  const urgencyData = priotityToHE(urgency);
   return (
     <ClientWrapper key={"wrapper-" + id}>
       <Card className="flex min-w-[280px] max-w-[340px] flex-1 grow flex-col self-start sm:basis-1/3 xl:basis-1/4">
@@ -127,7 +130,9 @@ export const RequestCallCard: React.FC<{
         <CardContent className="mt-auto">
           <div className="flex gap-x-4 text-sm text-muted-foreground">
             <div className="flex items-center">
-              <ShieldAlert className="fill-warning text-warning me-1 h-3 w-3" />
+              <ShieldAlert
+                className={`fill-${urgencyData.color} text-${urgencyData.color} me-1 h-3 w-3`}
+              />
               {urgencyLabel}
             </div>
             <div className="flex items-center">
