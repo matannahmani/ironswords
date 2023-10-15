@@ -3,7 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useEffect } from "react";
 
-export const GoogleLogin = () => {
+const GoogleLogin = () => {
   const data = useSession();
   useEffect(() => {
     if (data.status === "loading") return;
