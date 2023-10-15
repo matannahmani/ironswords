@@ -8,7 +8,7 @@ import { type RowData, type ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@ui/badge";
 import { Checkbox } from "@ui/checkbox";
 
-import { labels, priorities, statuses } from "../data/data";
+import { labels, ticketPriority, ticketStatus } from "../data/data";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { type RouterOutputs } from "@/trpc/shared";
@@ -81,7 +81,7 @@ export const columns: ColumnDef<
       <DataTableColumnHeader column={column} title="סטטוס פנייה" />
     ),
     cell: ({ row }) => {
-      const status = statuses.find(
+      const status = ticketStatus.find(
         (status) => status.value === row.getValue("status"),
       );
 
@@ -111,7 +111,7 @@ export const columns: ColumnDef<
       <DataTableColumnHeader column={column} title="חשיבות פנייה" />
     ),
     cell: ({ row }) => {
-      const priority = priorities.find(
+      const priority = ticketPriority.find(
         (priority) => priority.value === row.getValue("priority"),
       );
 

@@ -7,7 +7,7 @@ import { Button } from "@ui/button";
 import { Input } from "@ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
 
-import { priorities, statuses } from "../data/data";
+import { ticketPriority, ticketStatus } from "../data/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 
 interface DataTableToolbarProps<TData> {
@@ -34,14 +34,14 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn("status")}
             title="סטטוס פנייה"
-            options={statuses}
+            options={ticketStatus}
           />
         )}
         {table.getColumn("priority") && (
           <DataTableFacetedFilter
             column={table.getColumn("priority")}
             title="עדיפות פנייה"
-            options={priorities}
+            options={ticketPriority}
           />
         )}
         {isFiltered && (

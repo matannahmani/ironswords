@@ -12,7 +12,20 @@ import { api } from "@/trpc/server";
 import { RouterInputs } from "@/trpc/shared";
 import { getLocationTicketsSchema } from "@/shared/zod/tickets";
 import { Button } from "@/components/ui/button";
-
+import { cookies } from "next/headers";
+import { SelectLocations } from "@/components/navigation/select-locations";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RequestCard } from "@/components/cards/request-card";
 export const metadata: Metadata = {
   title: "Tickets",
   description: "Track all your call requests",
@@ -23,6 +36,8 @@ export default async function TicketsPage({
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
+  const cookiesJar = cookies();
+
   const fetchInput = getLocationTicketsSchema.safeParse({
     limit: 10,
     offset: 1,
@@ -31,7 +46,13 @@ export default async function TicketsPage({
 
   if (!fetchInput.success) {
     console.log("fetchInput.error", fetchInput.error);
-    return <h1>Invalid search params</h1>;
+    return (
+      <div className="flex flex-col gap-2">
+        <span className="text-lg font-semibold">
+          נמצא שגיאה בפרמטרים אנא עדכן את החיפוש שלך
+        </span>
+      </div>
+    );
   }
   const data = await api.location.tickets.query(fetchInput.data);
 
@@ -48,7 +69,14 @@ export default async function TicketsPage({
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <Button className="">פתיחת פנייה</Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="">פתיחת פנייה</Button>
+              </DialogTrigger>
+              <DialogContent className="w-[90vw] sm:max-w-[425px]">
+                <RequestCard />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <DataTable data={data.page ?? []} columns={columns} />

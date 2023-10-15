@@ -157,6 +157,7 @@ export const tickets = mysqlTable(
       .primaryKey(),
     location_id: varchar("location_id", { length: 128 }),
     operator_id: varchar("operator_id", { length: 128 }),
+    city_id: varchar("city_id", { length: 128 }),
     title: varchar("title", { length: 255 }),
     description: text("description"),
     priority: mysqlEnum("priority", ["LOW", "MID", "HIGH", "URGENT"]),
@@ -173,6 +174,7 @@ export const tickets = mysqlTable(
     deadlineIdx: index("deadline_idx").on(ticket.deadline),
     operatorIdIdx: index("operatorId_idx").on(ticket.operator_id),
     createdAtIdx: index("createdAt_idx").on(ticket.created_at),
+    cityIdIdx: index("cityId_idx").on(ticket.city_id),
     locationIdPriorityIdx: index("locationIdPriority_idx").on(
       ticket.location_id,
       ticket.priority,

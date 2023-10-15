@@ -1,4 +1,9 @@
-import { locations, locationOperators, tickets } from "@/server/db/schema";
+import {
+  locations,
+  locationOperators,
+  tickets,
+  citys,
+} from "@/server/db/schema";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -9,7 +14,69 @@ export const insertLocationOperatorSchema =
 
 export const insertTicketsSchema = createInsertSchema(tickets);
 
+export const insertCitySchema = createInsertSchema(citys);
+
 export const pageSchema = z.object({
   limit: z.number().int().positive().default(10),
   offset: z.number().int().positive().default(0),
 });
+
+export const priotityToHE = (
+  priority: typeof tickets.$inferSelect.priority,
+) => {
+  switch (priority) {
+    case "HIGH":
+      return {
+        i18n: "HIGH",
+        label: "דחיפות גבוהה",
+        color: "destructive",
+      };
+    case "MID":
+      return {
+        i18n: "MID",
+        label: "דחיפות בינונית",
+        color: "warning",
+      };
+    case "LOW":
+      return {
+        i18n: "LOW",
+        label: "דחיפות נמוכה",
+        color: "secondary",
+      };
+    case "URGENT":
+      return {
+        i18n: "HIGH",
+        label: "דחיפות גבוהה",
+        color: "primary",
+      };
+    default:
+      return {
+        i18n: "LOW",
+        label: "דחיפות נמוכה",
+        color: "secondary",
+      };
+  }
+};
+
+export const statusToHE = (status: typeof tickets.$inferSelect.status) => {
+  switch (status) {
+    case "OPEN":
+      return {
+        i18n: "OPEN",
+        label: "פתוח",
+        color: "success",
+      };
+    case "CLOSED":
+      return {
+        i18n: "CLOSED",
+        label: "סגור",
+        color: "secondary",
+      };
+    case "ASSIGNED":
+      return {
+        i18n: "ASSIGNED",
+        label: "בטיפול",
+        color: "warning",
+      };
+  }
+};

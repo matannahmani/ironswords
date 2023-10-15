@@ -48,7 +48,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { SelectLocations } from "./select-locations";
+import { SelectLocationWrapper, SelectLocations } from "./select-locations";
+import { headers } from "next/headers";
 
 const LoginOrAvatar = async () => {
   const { session } = await api.user.whoami.query();
@@ -115,7 +116,7 @@ const SelectLocation = async () => {
     const { locations } = await api.user.myLocations.query();
     return <SelectLocations locations={locations} />;
   } catch (err) {
-    return <span className="font-semibold">Call Center</span>;
+    return <span className="font-semibold">מרכז פניות</span>;
   }
 };
 
@@ -131,11 +132,15 @@ export default function NavbarHeader() {
                 "my-auto hidden self-center text-lg font-semibold md:block",
               )}
             >
-              <Suspense
-                fallback={<span className="font-semibold">Call Center</span>}
+              <SelectLocationWrapper
+                fallback={<span className="font-semibold">מרכז פניות</span>}
               >
-                <SelectLocation />
-              </Suspense>
+                <Suspense
+                  fallback={<span className="font-semibold">מרכז פניות</span>}
+                >
+                  <SelectLocation />
+                </Suspense>
+              </SelectLocationWrapper>
             </div>
           </div>
           <div className="flex items-center justify-between gap-4 self-stretch">

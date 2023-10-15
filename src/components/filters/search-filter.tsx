@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const SearchFilter: React.FC<{
   paramName: string;
@@ -17,6 +18,7 @@ const SearchFilter: React.FC<{
   items: {
     value: string;
     label: string | React.ReactNode;
+    color?: string;
   }[];
 }> = ({ paramName, label, items }) => {
   const pathname = usePathname();
@@ -42,7 +44,7 @@ const SearchFilter: React.FC<{
       <SelectTrigger className="w-[180px]">
         <SelectValue
           placeholder={`
-        Select ${paramName}
+        בחר ${label}
         `}
         />
       </SelectTrigger>
@@ -54,11 +56,17 @@ const SearchFilter: React.FC<{
               onClick={() => onSelect(item.value)}
               key={item.value}
               value={item.value}
+              className={cn(
+                item.color
+                  ? `bg-${item.color} text-${item.color}-foreground`
+                  : "",
+                "my-1",
+              )}
             >
               {item.label}
             </SelectItem>
           ))}
-          <SelectItem value="clear">Clear {label}</SelectItem>
+          <SelectItem value="clear">נקה {label}</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

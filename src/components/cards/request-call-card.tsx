@@ -35,7 +35,7 @@ import ClientWrapper from "../utils/client-wrapper";
 export const RequestCallCard: React.FC<{
   title: string;
   description: string;
-  id: number;
+  id: string;
   urgency: string;
   status: string;
   date: string;
@@ -56,7 +56,7 @@ export const RequestCallCard: React.FC<{
                 <div className="flex w-fit">
                   <Button variant="secondary" className=" px-3 shadow-none">
                     <PencilRuler className="h-4 w-4 sm:mr-2" />
-                    <span className="hidden sm:block">Actions</span>
+                    <span className="hidden sm:block">פעולות</span>
                   </Button>
                   <Separator
                     orientation="vertical"
@@ -76,19 +76,19 @@ export const RequestCallCard: React.FC<{
                 className="w-[200px]"
                 forceMount
               >
-                <DropdownMenuLabel>Call Actions</DropdownMenuLabel>
+                <DropdownMenuLabel>פעולות על פנייה</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Play className="mr-2 h-4 w-4" />
-                  Accept Call
+                  קבל פנייה
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem disabled>
                   <Share className="mr-2 h-4 w-4" />
-                  Share Call
+                  שתף פנייה
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled>
                   <Bookmark className="mr-2 h-4 w-4" />
-                  Bookmark Call
+                  סמן כמועדף
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -97,7 +97,7 @@ export const RequestCallCard: React.FC<{
         <CardContent className="mt-auto">
           <div className="flex space-x-4 text-sm text-muted-foreground">
             <div className="flex items-center">
-              <ShieldAlert className="mr-1 h-3 w-3 fill-orange-400 text-orange-400" />
+              <ShieldAlert className="fill-warning text-warning mr-1 h-3 w-3" />
               {urgency}
             </div>
             <div className="flex items-center">

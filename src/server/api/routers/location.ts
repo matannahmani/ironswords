@@ -40,6 +40,9 @@ export const locationRouter = createTRPCRouter({
       where: (tb, op) => op.eq(tb.location_id, input),
     });
   }),
+  myLocations: operatorProcedure.query(({ ctx }) => {
+    return ctx.session.operator.locationOperators;
+  }),
   tickets: operatorProcedure
     .input(getLocationTicketsSchema)
     .query(async ({ ctx, input }) => {
