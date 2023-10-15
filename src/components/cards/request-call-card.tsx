@@ -12,7 +12,7 @@ import {
   StarIcon,
 } from "lucide-react";
 
-import { Button } from "@ui/button";
+import { Button, buttonVariants } from "@ui/button";
 import {
   Card,
   CardContent,
@@ -38,7 +38,20 @@ import { RequestTakeCard } from "./request-take-card";
 import { tickets } from "@/server/db/schema";
 import { ticketPriority } from "@/app/operators/tickets/data/data";
 import { priotityToHE } from "@/shared/zod/base";
-
+import { cn } from "@/lib/utils";
+import { Suspense, lazy } from "react";
+import { Skeleton } from "../ui/skeleton";
+import dynamic from "next/dynamic";
+// import RequestCallCardActions from "./request-call-card-actions";
+const RequestCallCardActions = dynamic(
+  () => import("./request-call-card-actions"),
+  {
+    ssr: false,
+    loading() {
+      return <Skeleton className="h-10 w-32" />;
+    },
+  },
+);
 export const RequestCallCard: React.FC<{
   title: string;
   description: string;
@@ -70,61 +83,14 @@ export const RequestCallCard: React.FC<{
             </CardDescription>
           </div>
           <div className="flex w-fit items-center gap-x-1 rounded-md bg-secondary text-secondary-foreground">
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <div className="flex w-fit">
-                  <Button variant="secondary" className=" px-3 shadow-none">
-                    <PencilRuler className="h-4 w-4 sm:me-2" />
-                    <span className="hidden sm:block">פעולות</span>
-                  </Button>
-                  <Separator
-                    orientation="vertical"
-                    className="hidden h-[20px] sm:block"
-                  />
-                  <Button
-                    variant="secondary"
-                    className="hidden px-2 shadow-none sm:flex"
-                  >
-                    <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
-                  </Button>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                alignOffset={-5}
-                className="w-[200px]"
-                forceMount
-              >
-                <DropdownMenuLabel>פעולות על פנייה</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <DropdownMenuSelectItem>
-                      <Share className="me-2 h-4 w-4" />
-                      שתף פנייה
-                    </DropdownMenuSelectItem>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <RequestShareCard ticket_id={id} />
-                  </DialogContent>
-                </Dialog>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <DropdownMenuSelectItem disabled={status !== "OPEN"}>
-                      <Play className="me-2 h-4 w-4" />
-                      קבל פנייה
-                    </DropdownMenuSelectItem>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <RequestTakeCard name={title} ticketId={id} />
-                  </DialogContent>
-                </Dialog>
-                <DropdownMenuItem disabled>
-                  <Bookmark className="me-2 h-4 w-4" />
-                  סמן כמועדף
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Suspense fallback={<Skeleton className="h-8 w-24" />}>
+              <RequestCallCardActions
+                id={id}
+                title={title}
+                urgency={urgency}
+                status={status}
+              />
+            </Suspense>
           </div>
         </CardHeader>
         <CardContent className="mt-auto">

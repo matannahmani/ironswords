@@ -7,7 +7,6 @@ import SearchFilter from "@/components/filters/search-filter";
 import { createSelectSchema } from "drizzle-zod";
 import { tickets } from "@/server/db/schema";
 import { Badge } from "@/components/ui/badge";
-import { RequestCallCard } from "@/components/cards/request-call-card";
 import CardsContainer from "./cards-container";
 import { randomInt } from "crypto";
 import { priotityToHE, statusToHE } from "@/shared/zod/base";
@@ -20,17 +19,29 @@ import { Loader2 } from "lucide-react";
 // array of numbers 1-50
 const array50 = Array.from(Array(50).keys()).map((i) => ({ id: i + 1 }));
 
+const RenderCards = async () => {
+  const data = await api.city.tickets.query({
+    limit: 10,
+    offset: 1,
+    city_id: "66rnmiNulGHzRz_qKLTeW",
+  });
+
+  return (
+    <CardsContainer
+      initalData={data}
+      hasNextPage={data.hasNextPage}
+      hasPreviousPage={data.hasPreviousPage}
+    />
+  );
+};
+
 export default async function Home({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const offset = parseInt(searchParams.page as string) || 1;
-  const data = await api.city.tickets.query({
-    limit: 10,
-    offset,
-    city_id: "66rnmiNulGHzRz_qKLTeW",
-  });
+
   return (
     // <div className="container flex flex-1 grow flex-col gap-4 py-4 md:py-8">
     //   <div className="flex flex-col gap-2">
@@ -93,23 +104,10 @@ export default async function Home({
         <TicketsFilter />
         <Suspense
           fallback={
-            <div className="p-4">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              טוען נתונים
-            </div>
+            <Loader2 className="m-auto h-8 w-8 animate-spin text-primary" />
           }
         >
-          <CardsContainer
-            initalData={data}
-            hasNextPage={data.hasNextPage}
-            hasPreviousPage={data.hasPreviousPage}
-          >
-            {data.page.length === 0 && (
-              <div className="m-auto flex h-64 flex-col items-center justify-center self-center">
-                <span className="text-lg font-semibold">לא נמצאו פניות</span>
-              </div>
-            )}
-          </CardsContainer>
+          <RenderCards />
         </Suspense>
       </div>
     </div>

@@ -74,7 +74,6 @@ const LoginOrAvatar = async () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>
-              
               {/* My Account */}
               החשבון שלי
             </DropdownMenuLabel>
@@ -98,9 +97,7 @@ const LoginOrAvatar = async () => {
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
                 <Settings className="mr-2 h-4 w-4" />
-                <span>
-                הגדרות
-                </span>
+                <span>הגדרות</span>
                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -108,9 +105,7 @@ const LoginOrAvatar = async () => {
             <DropdownMenuItem asChild>
               <Link href="/api/auth/signout">
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>
-                  התנתק
-                </span>
+                <span>התנתק</span>
                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
               </Link>
             </DropdownMenuItem>

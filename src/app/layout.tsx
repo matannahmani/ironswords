@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="he">
+    <html lang="he" suppressHydrationWarning>
       <body dir="rtl" className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider headers={headers()}>
