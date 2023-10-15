@@ -8,7 +8,12 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { createInsertSchema } from "drizzle-zod";
-import { locationOperators, locations, tickets } from "@/server/db/schema";
+import {
+  locationOperators,
+  locations,
+  ticketResponses,
+  tickets,
+} from "@/server/db/schema";
 import { SQL, SQLWrapper, and, eq, inArray, like, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { getLocationTicketsSchema } from "@/shared/zod/tickets";
@@ -96,4 +101,42 @@ export const ticketsRouter = createTRPCRouter({
       where: (tb, op) => op.eq(tb.location_id, input),
     });
   }),
+  acceptTicket: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        ticket_id: z.string(),
+        freeText: z.string(),
+        telephone: z.string(),
+        needTransport: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // find ticket
+      const ticket = await ctx.db.query.tickets.findFirst({
+        where: (tb, op) => op.eq(tb.ticket_id, input.ticket_id),
+      });
+      // if no ticket or ticket is already accepted throw error
+      if (!ticket || ticket.status !== "OPEN") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not allowed to accept this ticket",
+        });
+      }
+      // update ticket status to accepted and create a new ticket response
+      const updateP = ctx.db
+        .update(tickets)
+        .set({
+          status: "ASSIGNED",
+        })
+        .where(and(eq(tickets.ticket_id, input.ticket_id)));
+      const insertP = ctx.db.insert(ticketResponses).values({
+        ticket_id: input.ticket_id,
+        user_id: ctx.session.user.id,
+        is_requesting_transportion: input.needTransport,
+        content: `הפנייה אושרה על ידי: ${input.name} והיא ממתינה לטיפול\מ פרטי קשר: ${input.telephone} הערות שולים: ${input.freeText}`,
+      });
+      const [update, insert] = await Promise.all([updateP, insertP]);
+      return update;
+    }),
 });

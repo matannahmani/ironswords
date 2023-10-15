@@ -29,14 +29,25 @@ export default async function Home({
     limit: 10,
     offset,
     city_id: "66rnmiNulGHzRz_qKLTeW",
+    // @ts-expect-error - fix this later
     priority:
       Array.isArray(searchParams.priority) && searchParams.priority.length > 0
         ? (searchParams.priority as RouterInputs["city"]["tickets"]["priority"])
+        : typeof searchParams.priority === "string"
+        ? [
+            searchParams.priority as unknown as RouterInputs["city"]["tickets"]["priority"],
+          ]
         : undefined,
+    // @ts-expect-error - fix this later
     status:
       Array.isArray(searchParams.status) && searchParams.status.length > 0
         ? (searchParams.status as RouterInputs["city"]["tickets"]["status"])
+        : typeof searchParams.status === "string"
+        ? [
+            searchParams.status as unknown as RouterInputs["city"]["tickets"]["status"],
+          ]
         : undefined,
+    title: searchParams.title as string | undefined,
   });
   return (
     // <div className="container flex flex-1 grow flex-col gap-4 py-4 md:py-8">
@@ -90,7 +101,7 @@ export default async function Home({
           <p className="text-muted-foreground">להלן רשימת הפניות</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button className="">
+          <Button disabled className="">
             שתף
             <Share className="ms-2 h-4 w-4" />
           </Button>
@@ -112,10 +123,12 @@ export default async function Home({
               key={`${row.ticket_id}`}
               title={row.title ?? ""}
               description={row.description ?? ""}
-              urgency={priotityToHE(row.priority)?.label ?? "לא ידוע"}
+              urgencyLabel={priotityToHE(row.priority)?.label ?? "לא ידוע"}
               // date="2021-09-01"
+              urgency={row.priority}
+              status={row.status}
               date={row.created_at?.toLocaleDateString() ?? "לא ידוע"}
-              status={statusToHE(row.status)?.label ?? "לא ידוע"}
+              statusLabel={statusToHE(row.status)?.label ?? "לא ידוע"}
               id={row.ticket_id}
             />
           ))}

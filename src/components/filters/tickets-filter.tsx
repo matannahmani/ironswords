@@ -62,7 +62,7 @@ export const TicketsFilter: React.FC = () => {
   useDebounced({ value: title, key: "title" });
   useDebounced({ value: status, key: "status" });
   useDebounced({ value: priority, key: "priority" });
-  const isFiltered = status ?? priority ?? title !== "";
+  const isFiltered = status.length > 0 ?? priority.length > 0 ?? title !== "";
   const reset = () => {
     const newParams = new URLSearchParams();
     setState({
