@@ -7,7 +7,30 @@ import FacebookProvider from "next-auth/providers/facebook";
 
 import { env } from "@/env.mjs";
 import { db } from "@/server/db";
-import { mysqlTable, users } from "@/server/db/schema";
+import {
+  accounts,
+  mysqlTable,
+  sessions,
+  users,
+  verificationTokens,
+} from "@/server/db/schema";
+import { MySqlTableFn } from "drizzle-orm/mysql-core";
+
+// @ts-expect-error - this is a temporary hack for drizzle adapter
+const mySqlTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
+  switch (name) {
+    case "user":
+      return users;
+    case "account":
+      return accounts;
+    case "session":
+      return sessions;
+    case "verificationToken":
+      return verificationTokens;
+    default:
+      return mysqlTable(name, columns, extraConfig);
+  }
+};
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -36,8 +59,18 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig: NextAuthConfig = {
-  adapter: DrizzleAdapter(db, mysqlTable),
-  callbacks: {},
+  adapter: DrizzleAdapter(db, mySqlTableHijack),
+  callbacks: {
+    async session({ session, user, token }) {
+      return {
+        ...session,
+        user: {
+          ...user,
+          ...token,
+        },
+      };
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,

@@ -30,7 +30,7 @@ export const users = mysqlTable("user", {
     mode: "date",
     fsp: 3,
   }).default(sql`CURRENT_TIMESTAMP(3)`),
-  role: mysqlEnum("role", ["USER", "ADMIN"]).default("USER"),
+  role: mysqlEnum("role", ["USER", "ADMIN", "OPERATOR"]).default("USER"),
   image: varchar("image", { length: 255 }),
 });
 
