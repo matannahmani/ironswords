@@ -78,9 +78,17 @@ export const locationRouter = createTRPCRouter({
       const { title, priority, location_id, status } = input;
 
       let locationId: null | string | undefined = null;
+      let locationIds: string[] = [];
       // check if location_id is undefined if so pick the first location
-      if (!location_id && !!ctx.session.operator.locationOperators?.length) {
-        locationId = ctx.session?.operator.locationOperators.at(0)?.location_id;
+      if (
+        (!location_id || location_id === "all") &&
+        !!ctx.session.operator.locationOperators?.length
+      ) {
+        // locationId = ctx.session?.operator.locationOperators.at(0)?.location_id;
+        locationId = "all";
+        locationIds = ctx.session.operator.locationOperators
+          .filter((loc) => !!loc.location_id)
+          .map((location) => location.location_id as string);
       }
       // else check if the operator is assigned to the location
       else
@@ -91,7 +99,9 @@ export const locationRouter = createTRPCRouter({
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       const filters = and(
-        eq(tickets.location_id, location_id as string),
+        locationId === "all"
+          ? inArray(tickets.location_id, locationIds)
+          : eq(tickets.location_id, location_id as string),
         ...(title ? [like(tickets.title, `%${title}%`)] : []),
         ...(!!priority ? [inArray(tickets.priority, priority)] : []),
         ...(!!status ? [inArray(tickets.status, status)] : []),

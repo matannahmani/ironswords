@@ -54,7 +54,7 @@ const navItems: {
     icon: <Tags size={24} />,
   },
   {
-    href: "/operators/tickets",
+    href: "/operators/all",
     title: "ניהול פניות",
     icon: <LayoutDashboard size={24} />,
     isOperator: true,
