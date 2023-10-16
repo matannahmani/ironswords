@@ -35,6 +35,9 @@ export const cityRouter = createTRPCRouter({
       limit: input.limit,
     });
   }),
+  all: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.citys.findMany();
+  }),
   getOne: adminProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return await ctx.db.query.citys.findFirst({
       where: (tb, op) => op.eq(tb.city_id, input),

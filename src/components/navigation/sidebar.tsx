@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Home, LayoutDashboard, Tags } from "lucide-react";
+import { Home, LayoutDashboard, Pin, Tags } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { ModeToggler } from "./mode-toggler";
 import { Separator } from "../ui/separator";
 import { DashboardIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
 
 const SidebarItem: React.FC<{
   isSelected?: boolean;
@@ -39,6 +40,7 @@ const navItems: {
   title: string;
   icon: React.ReactNode;
   isOperator?: boolean;
+  isAdmin?: boolean;
 }[] = [
   {
     href: "/",
@@ -50,11 +52,18 @@ const navItems: {
     title: "ניהול פניות",
     icon: <LayoutDashboard size={24} />,
     isOperator: true,
+    isAdmin: true,
   },
   {
     href: "/my-tickets",
     title: "הפניות שלי",
     icon: <Tags size={24} />,
+  },
+  {
+    href: "/locations",
+    title: "ניהול נקודות",
+    icon: <Pin size={24} />,
+    isAdmin: true,
   },
 ];
 
@@ -64,6 +73,9 @@ export default function Sidebar({
   containerClassName?: string;
 }) {
   const pathname = usePathname();
+  const data = useSession();
+  const isAdmin = data?.data?.user.role === "ADMIN";
+  const isOperator = data?.data?.user.role === "OPERATOR";
 
   return (
     <aside
@@ -77,15 +89,19 @@ export default function Sidebar({
       </h1>
 
       <div className="mt-12 flex flex-col justify-center gap-4">
-        {navItems.map((item, index) => (
-          <SidebarItem
-            isSelected={pathname === item.href}
-            key={item.href}
-            href={item.href}
-            title={item.title}
-            icon={item.icon}
-          />
-        ))}
+        {navItems.map((item, index) =>
+          (item.isAdmin && isAdmin) ||
+          (item.isOperator && isOperator) ||
+          (!item.isOperator && !item.isAdmin) ? (
+            <SidebarItem
+              isSelected={pathname === item.href}
+              key={item.href}
+              href={item.href}
+              title={item.title}
+              icon={item.icon}
+            />
+          ) : null,
+        )}
       </div>
       <div className="mt-auto flex flex-row justify-evenly">
         <Button disabled size="sm" variant="ghost">

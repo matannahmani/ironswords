@@ -51,9 +51,10 @@ import {
 } from "../ui/select";
 import { SelectLocationWrapper, SelectLocations } from "./select-locations";
 import { headers } from "next/headers";
+import { auth } from "@/server/auth";
 
 const LoginOrAvatar = async () => {
-  const { session } = await api.user.whoami.query();
+  const session = await auth();
   if (!!session?.user)
     return (
       <div className="flex w-fit max-w-full items-start justify-between gap-3 self-stretch  py-1 pl-1.5 pr-5">

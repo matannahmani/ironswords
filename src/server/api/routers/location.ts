@@ -30,18 +30,47 @@ export const locationRouter = createTRPCRouter({
       return await ctx.db.insert(locations).values(input).execute();
     }),
   getMany: adminProcedure.input(pageSchema).query(async ({ ctx, input }) => {
-    return await ctx.db.query.locations.findMany({
+    const locationsP = ctx.db.query.locations.findMany({
       offset: input.offset,
       limit: input.limit,
+      with: {
+        city: true,
+      },
     });
+    const countsP = ctx.db
+      .select({ count: sql<number>`count(*)` })
+      .from(locations)
+      .execute();
+    const [locationData, counts] = await Promise.all([locationsP, countsP]);
+    return {
+      total: Number(counts?.[0]?.count ?? 0),
+      page: locationData,
+      totalPages: Math.ceil((counts?.[0]?.count ?? 0) / input.limit),
+    };
   }),
   getOne: adminProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return await ctx.db.query.locations.findFirst({
       where: (tb, op) => op.eq(tb.location_id, input),
     });
   }),
+  updateOne: adminProcedure
+    .input(
+      insertLocationSchema.merge(
+        z.object({
+          location_id: z.string(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(locations)
+        .set(input)
+        .where(eq(locations.location_id, input.location_id))
+        .execute();
+    }),
   myLocations: operatorProcedure.query(({ ctx }) => {
-    return ctx.session.operator.locationOperators;
+    const d = ctx.session.operator.locationOperators;
+    return d;
   }),
   tickets: operatorProcedure
     .input(getLocationTicketsSchema)
