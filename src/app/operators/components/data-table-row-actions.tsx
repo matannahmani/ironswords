@@ -65,7 +65,6 @@ export function DataTableRowActions<TData>({
             </DropdownMenuItem>
           </DialogTrigger>
           <DialogContent>
-            {/* @ts-expect-error - generic is not fully typed yet. */}
             <OperatorCard {...row.original} readonly />
           </DialogContent>
         </Dialog>
