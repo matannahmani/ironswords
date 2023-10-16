@@ -1,5 +1,5 @@
 "use client";
-import { ticketPriority } from "@/app/operators/tickets/data/data";
+import { ticketPriority } from "@/app/operators/[locationId]/tickets/data/data";
 import { type tickets } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import { Button } from "@ui/button";
@@ -105,6 +105,9 @@ export const LocationCard: React.FC<
             <Select
               disabled={props.readonly}
               defaultValue={props.city_id ?? ""}
+              onValueChange={(value) =>
+                setState((prev) => ({ ...prev, city_id: value }))
+              }
             >
               <SelectTrigger id="area">
                 <SelectValue placeholder="בחר עיר" />

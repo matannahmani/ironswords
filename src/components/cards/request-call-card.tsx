@@ -36,7 +36,7 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { RequestShareCard } from "./request-share-card";
 import { RequestTakeCard } from "./request-take-card";
 import { tickets } from "@/server/db/schema";
-import { ticketPriority } from "@/app/operators/tickets/data/data";
+import { ticketPriority } from "@/app/operators/[locationId]/tickets/data/data";
 import { priotityToHE } from "@/shared/zod/base";
 import { cn } from "@/lib/utils";
 import { Suspense, lazy } from "react";

@@ -10,12 +10,13 @@ import {
   SelectItem,
 } from "@ui/select";
 import { Link } from "lucide-react";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import {
+  usePathname,
+  useSearchParams,
+  useRouter,
+  useParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
-
-const setClientSideCookie = (name: string, value: string) => {
-  document.cookie = `${name}=${value}; path=/`;
-};
 
 export const SelectLocationWrapper: React.FC<{
   children: React.ReactNode;
@@ -30,33 +31,23 @@ export const SelectLocations: React.FC<{
   locations: RouterOutputs["user"]["myLocations"]["locations"];
 }> = ({ locations }) => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const params = useParams() ?? ({} as { location_id?: string });
   const router = useRouter();
   const [value, setValue] = useState("");
   useEffect(() => {
-    const locationId = searchParams.get("location_id");
-    if (!pathname.includes("operators")) return;
-    if (value === "" && locationId) {
-      setValue(locationId);
-      setClientSideCookie("location_id", locationId);
+    if (params.location_id && typeof params.location_id === "string") {
+      setValue(params.location_id);
+      router.push(`./${params.location_id}`);
       return;
     }
-    if (locationId !== value) {
-      const newParams = new URLSearchParams(searchParams);
-      newParams.set("location_id", value);
-      setClientSideCookie("location_id", value);
-      router.push(`${pathname}?${newParams.toString()}`);
-    }
-  }, [searchParams, pathname]);
+  }, [params, pathname]);
 
   return (
     <Select
       value={value}
       onValueChange={(v) => {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.set("location_id", v);
-        router.push(`${pathname}?${newParams.toString()}`);
         setValue(v);
+        router.push(`./${v}`);
       }}
     >
       <SelectTrigger className="w-[180px]">

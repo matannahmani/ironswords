@@ -157,7 +157,11 @@ export const operatorProcedure = protectedProcedure.use(
         },
       },
     });
-    if (!operator ?? !operator?.locationOperators.length) {
+    if (
+      !operator ??
+      !operator?.locationOperators.length ??
+      ctx.session.user.role !== "ADMIN"
+    ) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({

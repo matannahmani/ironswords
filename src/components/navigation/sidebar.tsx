@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Home, LayoutDashboard, Pin, Tags } from "lucide-react";
+import { Home, LayoutDashboard, Pin, Tags, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -60,9 +60,15 @@ const navItems: {
     icon: <Tags size={24} />,
   },
   {
-    href: "/locations",
+    href: "/locations/",
     title: "ניהול נקודות",
     icon: <Pin size={24} />,
+    isAdmin: true,
+  },
+  {
+    href: "/operators",
+    title: "ניהול מפעילים",
+    icon: <Users size={24} />,
     isAdmin: true,
   },
 ];

@@ -3,6 +3,7 @@ import {
   locationOperators,
   tickets,
   citys,
+  operators,
 } from "@/server/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -15,6 +16,7 @@ export const insertLocationOperatorSchema =
 export const insertTicketsSchema = createInsertSchema(tickets);
 export const selectTicketsSchema = createSelectSchema(tickets);
 export const insertCitySchema = createInsertSchema(citys);
+export const insertOperatorSchema = createInsertSchema(operators);
 
 export const pageSchema = z.object({
   limit: z.number().int().default(10),

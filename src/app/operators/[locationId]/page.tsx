@@ -4,10 +4,10 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { z } from "zod";
 
-import { columns } from "./components/columns";
-import { DataTable } from "./components/data-table";
-import { UserNav } from "./components/user-nav";
-import { taskSchema } from "./data/schema";
+import { columns } from "./tickets/components/columns";
+import { DataTable } from "./tickets/components/data-table";
+import { UserNav } from "./tickets/components/user-nav";
+import { taskSchema } from "./tickets/data/schema";
 import { api } from "@/trpc/server";
 import { RouterInputs } from "@/trpc/shared";
 import { getLocationTicketsSchema } from "@/shared/zod/tickets";
@@ -34,13 +34,18 @@ export const metadata: Metadata = {
 
 export default async function TicketsPage({
   searchParams,
+  params,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
+  params: {
+    locationId: string;
+  };
 }) {
   const fetchInput = getLocationTicketsSchema.safeParse({
     limit: Number(searchParams.limit) || 10,
     offset: Number(searchParams.offset) || 0,
     ...searchParams,
+    location_id: params.locationId === "all" ? undefined : params.locationId,
   });
 
   if (!fetchInput.success) {

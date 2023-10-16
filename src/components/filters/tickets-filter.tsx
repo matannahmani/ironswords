@@ -10,7 +10,7 @@ import { TableFilter } from "./table-filter";
 import {
   ticketPriority,
   ticketStatus,
-} from "@/app/operators/tickets/data/data";
+} from "@/app/operators/[locationId]/tickets/data/data";
 import { filterAtoms } from "@/app/cards-container";
 import { useAtom } from "jotai";
 const useDebounced = ({
