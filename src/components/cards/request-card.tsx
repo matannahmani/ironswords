@@ -24,6 +24,7 @@ import { Textarea } from "@ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { ticketCategories } from "@/shared/zod/ticketCategories";
 
 export const RequestCard: React.FC<
   Partial<typeof tickets.$inferSelect & { readonly?: boolean }>
@@ -107,11 +108,7 @@ export const RequestCard: React.FC<
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="team">Team</SelectItem>
                 <SelectItem value="eilat">אילת</SelectItem>
-                <SelectItem value="account">Account</SelectItem>
-                <SelectItem value="deployments">Deployments</SelectItem>
-                <SelectItem value="support">Support</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -169,6 +166,84 @@ export const RequestCard: React.FC<
             }
             id="description"
             placeholder="פרט את הבעיה שלך כמה שיותר מפורט"
+          />
+        </div>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              פרטי מבקש העזרה
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="requester_fullname">שם מלא</Label>
+            <Input
+              disabled={props.readonly}
+              value={state.requester_fullname ?? ""}
+              onChange={(event) =>
+                setState((prev) => ({
+                  ...prev,
+                  requester_fullname: event.target.value,
+                }))
+              }
+              id="requester_fullname"
+              placeholder="שם פרטי ושם משפחה"
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="requester_phone">טלפון</Label>
+            <Input
+              disabled={props.readonly}
+              value={state.requester_phone ?? ""}
+              onChange={(event) =>
+                setState((prev) => ({
+                  ...prev,
+                  requester_phone: event.target.value,
+                }))
+              }
+              id="requester_phone"
+              placeholder="054-222-3333"
+            />
+          </div>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="ticket_category">קטגוריה</Label>
+          <Select
+            disabled={props.readonly}
+            defaultValue={state.category ?? ""}
+            onValueChange={(value: string) =>
+              setState((prev) => ({
+                ...prev,
+                category: value as (typeof ticketCategories)[number],
+              }))
+            }
+          >
+            <SelectTrigger id="category">
+              <SelectValue placeholder="בחר קטגוריה" />
+            </SelectTrigger>
+            <SelectContent>
+              {ticketCategories.map((category, index) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="notes">הערות נוספות</Label>
+          <Textarea
+            disabled={props.readonly}
+            value={state.notes ?? ""}
+            onChange={(event) =>
+              setState((prev) => ({ ...prev, notes: event.target.value }))
+            }
+            id="notes"
+            placeholder="כל מה שאתה רוצה להוסיף"
           />
         </div>
       </CardContent>

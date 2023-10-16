@@ -76,6 +76,27 @@ export const columns: ColumnDef<
     },
   },
   {
+    accessorKey: "category",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="קטגוריה" />
+    ),
+    cell: ({ row }) => {
+      // const label = labels.find((label) => label.value === row.original.);
+
+      return (
+        <div className="flex space-x-2">
+          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("category")}
+          </span>
+        </div>
+      );
+    },
+    meta: {
+      title: "קטגוריה",
+    },
+  },
+  {
     accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="סטטוס פנייה" />

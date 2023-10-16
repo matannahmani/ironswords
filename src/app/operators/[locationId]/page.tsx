@@ -51,9 +51,10 @@ export default async function TicketsPage({
   if (!fetchInput.success) {
     console.log("fetchInput.error", fetchInput.error);
     return (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 p-4">
         <span className="text-lg font-semibold">
-          נמצא שגיאה בפרמטרים אנא עדכן את החיפוש שלך
+          נמצא שגיאה בפרמטרים אנא עדכן את החיפוש שלך <br />
+          אנא וודא שבחרת מיקום
         </span>
       </div>
     );

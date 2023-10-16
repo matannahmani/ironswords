@@ -9,6 +9,7 @@ import { DataTableViewOptions } from "./data-table-view-options";
 
 import { ticketPriority, ticketStatus } from "../data/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { ticketCategories } from "@/shared/zod/ticketCategories";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -42,6 +43,16 @@ export function DataTableToolbar<TData>({
             column={table.getColumn("priority")}
             title="עדיפות פנייה"
             options={ticketPriority}
+          />
+        )}
+        {table.getColumn("category") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("category")}
+            title="עדיפות פנייה"
+            options={ticketCategories.map((category) => ({
+              label: category,
+              value: category,
+            }))}
           />
         )}
         {isFiltered && (

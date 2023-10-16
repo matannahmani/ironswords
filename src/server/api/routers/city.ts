@@ -86,6 +86,11 @@ export const cityRouter = createTRPCRouter({
         where: (tb, op) => filters,
         offset: (input.offset - 1) * input.limit,
         limit: input.limit,
+        columns: {
+          requester_fullname: false,
+          requester_phone: false,
+          notes: false,
+        },
       });
       const [total, page] = await Promise.all([totalP, pageP]);
       const hasNextPage = page.length === input.limit;

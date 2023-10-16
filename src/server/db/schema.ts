@@ -13,6 +13,7 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 import { nanoid } from "nanoid";
+import { ticketCategories } from "../../shared/zod/ticketCategories";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -157,6 +158,10 @@ export const tickets = mysqlTable(
     operator_id: varchar("operator_id", { length: 128 }).notNull(),
     city_id: varchar("city_id", { length: 128 }).notNull(),
     title: varchar("title", { length: 255 }).notNull(),
+    category: mysqlEnum("category", ticketCategories).notNull(),
+    requester_fullname: varchar("requester_name", { length: 255 }).notNull(),
+    requester_phone: varchar("requester_phone", { length: 255 }).notNull(),
+    notes: text("notes"),
     description: text("description"),
     priority: mysqlEnum("priority", ["LOW", "MID", "HIGH", "URGENT"]),
     status: mysqlEnum("status", ["OPEN", "CLOSED", "ASSIGNED"]).$default(
@@ -173,6 +178,7 @@ export const tickets = mysqlTable(
     statusIdx: index("status_idx").on(ticket.status),
     deadlineIdx: index("deadline_idx").on(ticket.deadline),
     operatorIdIdx: index("operatorId_idx").on(ticket.operator_id),
+    categoryIdIdx: index("categoryId_idx").on(ticket.category),
     createdAtIdx: index("createdAt_idx").on(ticket.created_at),
     cityIdIdx: index("cityId_idx").on(ticket.city_id),
     locationIdPriorityIdx: index("locationIdPriority_idx").on(

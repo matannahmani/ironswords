@@ -47,17 +47,18 @@ const navItems: {
     title: "בית",
     icon: <Home size={24} />,
   },
+
+  {
+    href: "/my-tickets",
+    title: "הפניות שלי",
+    icon: <Tags size={24} />,
+  },
   {
     href: "/operators/tickets",
     title: "ניהול פניות",
     icon: <LayoutDashboard size={24} />,
     isOperator: true,
     isAdmin: true,
-  },
-  {
-    href: "/my-tickets",
-    title: "הפניות שלי",
-    icon: <Tags size={24} />,
   },
   {
     href: "/locations/",
@@ -67,7 +68,7 @@ const navItems: {
   },
   {
     href: "/operators",
-    title: "ניהול מפעילים",
+    title: "ניהול מתאמים",
     icon: <Users size={24} />,
     isAdmin: true,
   },

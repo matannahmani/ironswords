@@ -3,7 +3,7 @@ import { insertTicketsSchema, pageSchema } from "./base";
 
 export const getLocationTicketsSchema = pageSchema.merge(
   z.object({
-    location_id: insertTicketsSchema.shape.location_id.min(8).optional(),
+    location_id: insertTicketsSchema.shape.location_id.optional(),
     title: insertTicketsSchema.shape.title.optional(),
     priority: insertTicketsSchema.shape.priority
       .unwrap()

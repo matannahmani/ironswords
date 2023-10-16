@@ -107,9 +107,13 @@ export const ticketsRouter = createTRPCRouter({
   myPersoanlTickets: protectedProcedure.query(async ({ ctx, input }) => {
     return await ctx.db.query.ticketResponses.findMany({
       where: (tb, op) => op.eq(tb.user_id, ctx.session.user.id),
-
       with: {
         ticket: {
+          columns: {
+            requester_fullname: false,
+            requester_phone: false,
+            notes: false,
+          },
           with: {
             operator: true,
           },
