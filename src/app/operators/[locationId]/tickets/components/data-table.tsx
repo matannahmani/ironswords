@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@ui/table";
 
-import { DataTablePagination } from "./data-table-pagination";
+import { DataTablePagination } from "@/components/table/data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { api } from "@/trpc/react";
 import { RouterInputs, RouterOutputs } from "@/trpc/shared";

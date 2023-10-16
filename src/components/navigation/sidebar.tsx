@@ -87,7 +87,7 @@ export default function Sidebar({
   return (
     <aside
       className={cn(
-        "border-r-border-20 sticky top-0 z-10 hidden h-screen w-[240px] max-w-full flex-col border-l border-r border-solid bg-background pb-10 pt-[22px] text-foreground md:flex",
+        "border-r-border-20 sticky top-0 hidden h-screen w-[240px] max-w-full flex-col border-l border-r border-solid bg-background pb-10 pt-[22px] text-foreground md:flex lg:z-10",
         containerClassName,
       )}
     >

@@ -32,6 +32,9 @@ Your support is invaluable in making a difference in the lives of many. Whether 
 4. הגדירו את Google Cloud OAuth על פי ההוראות שנמצאות [כאן](https://next-auth.js.org/providers/google).
 5. התקינו את Vercel ואת Google Cloud על פי ההוראות שבאתרים הבאים: [Vercel](https://vercel.com/) ו- [Google Cloud](https://cloud.google.com/?hl=en).
 6. העתיקו את הערכים הנדרשים לקובץ `.env` מהדוגמה שמסופקת בפרויקט.
+7. להתחבר עם חשבון גוגל
+8. להריץ את הסטודיו (bun run db:studio)
+9. לגשת לטבלת users ולעדכן את הפרמטר role לADMIN
 
 #### הגשת תרומות:
 
@@ -67,6 +70,9 @@ Your support is invaluable in making a difference in the lives of many. Whether 
 4. Set up Google Cloud OAuth using the instructions found [here](https://next-auth.js.org/providers/google).
 5. Install and set up Vercel and Google Cloud following the guidelines on their respective websites: [Vercel](https://vercel.com/) and [Google Cloud](https://cloud.google.com/?hl=en).
 6. Copy the required values into your `.env` file from the sample provided in the project.
+7. Login with a google account
+8. run drizzle studio by bun run db:studio
+9. access users table and update your role to ADMIN
 
 #### Contributing:
 

@@ -33,7 +33,7 @@ export default function RootLayout({
           <TRPCReactProvider headers={headers()}>
             <div className="flex">
               <Sidebar />
-              <div className=" flex flex-1 flex-col ">
+              <div className=" flex w-full flex-1 flex-col">
                 <NavbarHeader />
                 {children}
               </div>

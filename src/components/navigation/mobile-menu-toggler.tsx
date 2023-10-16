@@ -20,7 +20,7 @@ const MobileMenuToggler: React.FC<{ children?: React.ReactNode }> = ({
         </Button>
       </SheetTrigger>
       <SheetContent side="left">
-        <Sidebar containerClassName="flex border-none" />
+        <Sidebar containerClassName="flex border-none max-w-[280px] py-2 z-0" />
       </SheetContent>
     </Sheet>
   );

@@ -24,7 +24,7 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
   const selectedLength = table.getSelectedRowModel().rows.length;
   return (
-    <div className="flex items-center justify-between px-2">
+    <div className="flex flex-wrap items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
         {selectedLength > 1
           ? `נבחרו ${selectedLength} רשומות`

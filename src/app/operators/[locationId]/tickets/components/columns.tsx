@@ -95,6 +95,9 @@ export const columns: ColumnDef<
     meta: {
       title: "קטגוריה",
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "status",
