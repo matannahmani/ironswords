@@ -76,15 +76,22 @@ export const locationRouter = createTRPCRouter({
     .input(getLocationTicketsSchema)
     .query(async ({ ctx, input }) => {
       const { title, priority, location_id, status } = input;
-      // first  check if the operator is assigned to the location
-      const hasLocation = ctx.session.operator.locationOperators.find(
-        (location) => location.location_id === input.location_id,
-      );
-      if (!hasLocation) {
+
+      let locationId: null | string | undefined = null;
+      // check if location_id is undefined if so pick the first location
+      if (!location_id && !!ctx.session.operator.locationOperators?.length) {
+        locationId = ctx.session?.operator.locationOperators.at(0)?.location_id;
+      }
+      // else check if the operator is assigned to the location
+      else
+        locationId = ctx.session.operator.locationOperators.find(
+          (location) => location.location_id === input.location_id,
+        )?.location_id;
+      if (!locationId) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       const filters = and(
-        eq(tickets.location_id, location_id),
+        eq(tickets.location_id, location_id as string),
         ...(title ? [like(tickets.title, `%${title}%`)] : []),
         ...(!!priority ? [inArray(tickets.priority, priority)] : []),
         ...(!!status ? [inArray(tickets.status, status)] : []),

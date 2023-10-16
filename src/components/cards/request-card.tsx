@@ -1,5 +1,5 @@
 "use client";
-import { ticketPriority } from "@/app/operators/tickets/data/data";
+import { ticketPriority } from "@/app/operators/[locationId]/tickets/data/data";
 import { type tickets } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import { Button } from "@ui/button";

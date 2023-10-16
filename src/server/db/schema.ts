@@ -114,7 +114,6 @@ export const locationOperators = mysqlTable(
   {
     location_id: varchar("location_id", { length: 128 }),
     operator_id: varchar("operator_id", { length: 128 }),
-    role: mysqlEnum("role", ["Admin", "Operator"]),
   },
   (locationOperator) => ({
     // indexes
