@@ -8,6 +8,7 @@ export const transformer = superjson;
 export function getBaseUrl() {
   if (typeof window !== "undefined") return "";
   const vc = process.env.VERCEL_URL;
+  if (process.env.NODE_ENV === "production") return "https://ironswords.xyz";
   if (vc) return "https://" + vc;
   return "http://localhost:3000";
 }

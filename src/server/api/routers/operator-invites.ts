@@ -85,7 +85,11 @@ export const operatorInvitesRouter = createTRPCRouter({
         from: env.EMAIL_FROM,
         subject: "הזמנה להצטרפות למערכת - חרבות ברזל",
         react: OperatorInviteEmail({
-          inviteLink: `${getBaseUrl()}/operator-invite/${encodeInvite({
+          inviteLink: `${
+            env.NODE_ENV === "development"
+              ? getBaseUrl()
+              : "https://ironswords.xyz"
+          }/operator-invite/${encodeInvite({
             invite_id,
             expires: newOpInvite?.expires?.getTime() ?? 0,
           })}`,
