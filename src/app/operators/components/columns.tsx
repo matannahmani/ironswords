@@ -67,7 +67,12 @@ export const columns: ColumnDef<
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="שם נקודה" />
+      <DataTableColumnHeader
+        column={column}
+        title="
+      שם המתאם
+      "
+      />
     ),
     cell: ({ row }) => {
       // const label = labels.find((label) => label.value === row.original.);
@@ -82,7 +87,7 @@ export const columns: ColumnDef<
       );
     },
     meta: {
-      title: "שם",
+      title: "שם המתאם",
     },
   },
   {

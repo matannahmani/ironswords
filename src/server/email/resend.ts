@@ -1,6 +1,8 @@
+"server-only";
+import "server-only";
 import { env } from "@/env.mjs";
 import { Resend } from "resend";
-import { CreateEmailOptions } from "resend/build/src/emails/interfaces";
+import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 
 const resend = new Resend(env.RESEND_KEY);
 

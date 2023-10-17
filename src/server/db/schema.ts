@@ -159,14 +159,10 @@ export const operatorsInvite = mysqlTable(
     is_claimed: boolean("is_claimed").default(false),
     payload: json("json")
       .$type<
-        Omit<
-          typeof operators.$inferInsert,
-          | "user_id"
-          | ("operator_id" & {
-              contact_info: string | undefined;
-              loaction_ids: string[];
-            })
-        >
+        Omit<typeof operators.$inferInsert, "user_id" | "operator_id"> & {
+          contact_info: string | undefined;
+          location_ids: string[];
+        }
       >()
       .notNull(),
     expires: datetime("expires"),

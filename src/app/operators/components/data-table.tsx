@@ -146,9 +146,12 @@ export function DataTable<TValue>({
   });
 
   return (
-    <div className="flex flex-1 flex-col space-y-4">
-      <DataTableToolbar table={table} />
-      <div ref={animateRef} className="relative flex-1 rounded-md border">
+    <div ref={animateRef} className="flex flex-1 flex-col space-y-4">
+      {viewMode === "operators" && <DataTableToolbar table={table} />}
+      <div
+        key={`viewmode-con-${viewMode}`}
+        className="relative flex-1 rounded-md border"
+      >
         <Table key={`viewmode-${viewMode}`}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -168,9 +171,9 @@ export function DataTable<TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+          <TableBody className="h-full w-full">
+            {table.getRowModel()?.rows?.length ? (
+              table.getRowModel()?.rows?.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

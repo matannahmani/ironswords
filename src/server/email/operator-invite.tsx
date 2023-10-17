@@ -1,17 +1,15 @@
 import { getBaseUrl } from "@/trpc/shared";
-import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Img,
-  Link,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Body } from "@react-email/body";
+import { Hr } from "@react-email/hr";
+import { Html } from "@react-email/html";
+import { Img } from "@react-email/img";
+import { Preview } from "@react-email/preview";
+import { Section } from "@react-email/section";
+import { Text } from "@react-email/text";
+import { Container } from "@react-email/container";
+import { Head } from "@react-email/head";
+import { Heading } from "@react-email/heading";
+import { Link } from "@react-email/link";
 import * as React from "react";
 
 interface OperatorInviteEmailProps {
@@ -37,7 +35,7 @@ export const OperatorInviteEmail = ({
           <Text style={paragraph}>
             <Link style={link} href={inviteLink}>
               {/* 👉 Click here to sign in 👈 */}
-              👉 לחץ כאן כדי להתחבר 👈
+              👈לחץ כאן כדי להתחבר👉
             </Link>
           </Text>
           <Text style={paragraph}>

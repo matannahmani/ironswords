@@ -14,8 +14,9 @@ import {
   tickets,
   operatorsInvite,
   operators,
+  users,
 } from "@/server/db/schema";
-import { SQL, SQLWrapper, and, eq, inArray, like, sql } from "drizzle-orm";
+import { SQL, SQLWrapper, and, eq, inArray, like, not, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { getLocationTicketsSchema } from "@/shared/zod/tickets";
 import {
@@ -29,13 +30,17 @@ import { sendEmail } from "@/server/email/resend";
 import OperatorInviteEmail from "@/server/email/operator-invite";
 import { getBaseUrl } from "@/trpc/shared";
 import { env } from "@/env.mjs";
+import { encodeInvite } from "@/shared/utils/invite-encoder";
+
+const toBase64 = (str: string) => Buffer.from(str).toString("base64");
 
 export const operatorInvitesRouter = createTRPCRouter({
   createOne: adminProcedure
     .input(insertOperatorInviteSchema)
     .mutation(async ({ ctx, input }) => {
-      const oneWeekFromNow = new Date();
-      oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+      const oneWeekFromNow = new Date(
+        new Date().getTime() + 7 * 24 * 60 * 60 * 1000,
+      );
       // check if the email is already an operator
       const isExists = await ctx.db.query.operators.findFirst({
         where: (tb, op) => op.eq(tb.email, input.email),
@@ -47,42 +52,53 @@ export const operatorInvitesRouter = createTRPCRouter({
         });
       }
       const invite_id = nanoid();
-      const result = await ctx.db
-        .insert(operatorsInvite)
-        .values({
-          ...input,
-          expires: oneWeekFromNow,
-          invite_id,
-        })
-        .execute();
+      await ctx.db.transaction(async (trx) => {
+        // delete previous invite if exists
+        await trx
+          .delete(operatorsInvite)
+          .where(and(eq(operatorsInvite.email, input.email)))
+          .execute();
+        const result = await trx
+          .insert(operatorsInvite)
+          .values({
+            email: input.email,
+            payload: {
+              name: input.payload.name,
+              email: input.payload.email,
+
+              phone: input.payload.phone,
+              location_ids: input.payload.location_ids,
+              contact_info: input.payload.contact_info ?? undefined,
+            },
+            expires: oneWeekFromNow,
+            invite_id,
+          })
+          .execute();
+      });
+      const newOpInvite = await ctx.db.query.operatorsInvite.findFirst({
+        where: (tb, op) => op.eq(tb.invite_id, invite_id),
+      });
+      console.log(newOpInvite);
+
       await sendEmail({
         to: input.email,
         from: env.EMAIL_FROM,
         subject: "הזמנה להצטרפות למערכת - חרבות ברזל",
         react: OperatorInviteEmail({
-          inviteLink: `${getBaseUrl()}/operator-invite/${invite_id}/${Number(
-            oneWeekFromNow,
-          )}`,
+          inviteLink: `${getBaseUrl()}/operator-invite/${encodeInvite({
+            invite_id,
+            expires: newOpInvite?.expires?.getTime() ?? 0,
+          })}`,
         }),
+
+        // OperatorInviteEmail({
+        //   inviteLink: `${getBaseUrl()}/operator-invite/${invite_id}/${Number(
+        //     oneWeekFromNow,
+        //   )}`,
       });
       return {
         status: "OK",
       };
-    }),
-  createMany: adminProcedure
-    .input(z.array(insertOperatorInviteSchema))
-    .mutation(async ({ ctx, input }) => {
-      const oneWeekFromNow = new Date();
-      oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
-      return await ctx.db
-        .insert(operatorsInvite)
-        .values(
-          input.map((payload) => ({
-            ...payload,
-            expires: oneWeekFromNow,
-          })),
-        )
-        .execute();
     }),
   getMany: adminProcedure.input(pageSchema).query(async ({ ctx, input }) => {
     const pageP = ctx.db.query.operatorsInvite.findMany({
@@ -113,7 +129,7 @@ export const operatorInvitesRouter = createTRPCRouter({
         where: (tb, op) =>
           and(
             op.eq(tb.invite_id, input.invite_id),
-            op.eq(tb.expires, new Date(input.expires)),
+            op.eq(tb.expires, new Date(parseInt(input.expires))),
           ),
       });
       if (!invite) {
@@ -124,7 +140,7 @@ export const operatorInvitesRouter = createTRPCRouter({
       }
       return invite;
     }),
-  claimInvite: publicProcedure
+  claimInvite: protectedProcedure
     .input(
       z.object({
         expires: z.string(),
@@ -132,12 +148,10 @@ export const operatorInvitesRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const expires = new Date(parseInt(input.expires));
       const targetInvite = await ctx.db.query.operatorsInvite.findFirst({
         where: (tb, op) =>
-          and(
-            op.eq(tb.invite_id, input.invite_id),
-            op.eq(tb.expires, new Date(input.expires)),
-          ),
+          and(op.eq(tb.invite_id, input.invite_id), op.eq(tb.expires, expires)),
       });
       if (!targetInvite) {
         throw new TRPCError({
@@ -145,6 +159,7 @@ export const operatorInvitesRouter = createTRPCRouter({
           message: "Invite not found",
         });
       }
+      const { payload } = targetInvite;
       if (targetInvite.is_claimed) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -160,6 +175,12 @@ export const operatorInvitesRouter = createTRPCRouter({
           message: "User does not exist",
         });
       }
+      if (!payload.location_ids?.length || payload.location_ids?.length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No locations selected",
+        });
+      }
       const result = await ctx.db.transaction(async (trx) => {
         const invite = await trx
           .update(operatorsInvite)
@@ -169,14 +190,32 @@ export const operatorInvitesRouter = createTRPCRouter({
           .where(
             and(
               eq(operatorsInvite.invite_id, input.invite_id),
-              eq(operatorsInvite.expires, new Date(input.expires)),
+              eq(operatorsInvite.expires, expires),
             ),
           )
           .execute();
+        const operator_id = nanoid();
         const operator = await trx.insert(operators).values({
           user_id: targetUser.id,
           ...targetInvite.payload,
+          operator_id,
         });
+        const updateUser = await trx
+          .update(users)
+          .set({
+            role: "OPERATOR",
+          })
+          .where(
+            and(eq(users.id, targetUser.id), not(eq(users.role, "ADMIN"))),
+          );
+        const createLocationOperators = await trx
+          .insert(locationOperators)
+          .values(
+            payload.location_ids.map((location_id) => ({
+              location_id,
+              operator_id,
+            })),
+          );
         return [invite, operator];
       });
       if (!result) {

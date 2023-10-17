@@ -29,6 +29,8 @@ export const insertOperatorInviteSchema = createInsertSchema(operatorsInvite)
         .omit({
           user_id: true,
           operator_id: true,
+          invite_id: true,
+          is_claimed: true,
         })
         .merge(
           z.object({

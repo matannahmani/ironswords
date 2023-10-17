@@ -52,39 +52,21 @@ export const inviteColumns: ColumnDef<
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "invite_id",
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="מזהה" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => (
+      <div className="w-[80px]">{row.getValue("invite_id")}</div>
+    ),
     enableSorting: false,
     enableHiding: false,
     meta: {
       title: "מזהה",
     },
   },
-  {
-    accessorKey: "invite_id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="קוד הזמנה" />
-    ),
-    cell: ({ row }) => {
-      // const label = labels.find((label) => label.value === row.original.);
 
-      return (
-        <div className="flex space-x-2">
-          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("invite_id")}
-          </span>
-        </div>
-      );
-    },
-    meta: {
-      title: "קוד הזמנה",
-    },
-  },
   {
     accessorKey: "email",
     header: ({ column }) => (

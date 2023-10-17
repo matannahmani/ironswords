@@ -1,0 +1,4 @@
+[install]
+install.peer = false
+[install]
+peer = false
