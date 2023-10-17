@@ -27,8 +27,8 @@ declare module "@tanstack/table-core" {
     title: string;
   }
 }
-export const columns: ColumnDef<
-  RouterOutputs["operator"]["getMany"]["page"][number]
+export const inviteColumns: ColumnDef<
+  RouterOutputs["operatorInvites"]["getMany"]["page"][number]
 >[] = [
   {
     id: "select",
@@ -52,44 +52,21 @@ export const columns: ColumnDef<
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "invite_id",
 
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="מזהה" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => (
+      <div className="w-[80px]">{row.getValue("invite_id")}</div>
+    ),
     enableSorting: false,
     enableHiding: false,
     meta: {
       title: "מזהה",
     },
   },
-  {
-    accessorKey: "name",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="
-      שם המתאם
-      "
-      />
-    ),
-    cell: ({ row }) => {
-      // const label = labels.find((label) => label.value === row.original.);
 
-      return (
-        <div className="flex space-x-2">
-          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name")}
-          </span>
-        </div>
-      );
-    },
-    meta: {
-      title: "שם המתאם",
-    },
-  },
   {
     accessorKey: "email",
     header: ({ column }) => (
@@ -110,56 +87,16 @@ export const columns: ColumnDef<
     },
   },
   {
-    accessorKey: "phone",
+    accessorKey: "is_claimed",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="טלפון" />
+      <DataTableColumnHeader column={column} title="האם אושרה" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
-          <span>{row.original.phone}</span>
-        </div>
+        <Badge variant={row.original.is_claimed ? "secondary" : "destructive"}>
+          {row.original.is_claimed ? "כן" : "לא"}
+        </Badge>
       );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    meta: {
-      title: "טלפון",
-    },
-  },
-  {
-    accessorKey: "locationOperators",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="מקומות" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-fit items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                צפה במיקומים ({row.original.locationOperators.length ?? 0})
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>מקומות</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {row.original.locationOperators.map((op) => (
-                <DropdownMenuItem key={`${op?.operator_id}_${op?.location_id}`}>
-                  {op.location?.city?.name} - {op.location?.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    meta: {
-      title: "מקומות",
     },
   },
 

@@ -5,6 +5,7 @@ import { locationRouter } from "./routers/location";
 import { cityRouter } from "./routers/city";
 import { ticketsRouter } from "./routers/tickets";
 import { operatorRouter } from "./routers/operator";
+import { operatorInvitesRouter } from "./routers/operator-invites";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   location: locationRouter,
   operator: operatorRouter,
+  operatorInvites: operatorInvitesRouter,
   city: cityRouter,
   tickets: ticketsRouter,
 });

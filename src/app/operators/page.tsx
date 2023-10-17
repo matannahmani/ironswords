@@ -29,6 +29,7 @@ import { pageSchema } from "@/shared/zod/base";
 import { LocationCard } from "@/components/cards/location-card";
 import { OperatorCard } from "@/components/cards/operator-card";
 import { CitiesInitailizer } from "./components/cities-context";
+import ViewSwitch from "./components/view-switch";
 export const metadata: Metadata = {
   title: "Operators",
   description: "Track all your operators requests",
@@ -71,15 +72,16 @@ export default async function LocationsPage({
               כאן תוכל לצפות רשימת המתאמים שלך
             </p>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-4 space-x-2">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="">צור מתאם</Button>
+                <Button className="">הזמן מתאם</Button>
               </DialogTrigger>
               <DialogContent className="w-[90vw] sm:max-w-[425px]">
                 <OperatorCard />
               </DialogContent>
             </Dialog>
+            <ViewSwitch />
           </div>
         </div>
         <DataTable

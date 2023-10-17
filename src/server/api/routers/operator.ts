@@ -101,12 +101,16 @@ export const operatorRouter = createTRPCRouter({
     }),
   updateOne: adminProcedure
     .input(
-      insertOperatorSchema.merge(
-        z.object({
-          location_ids: z.array(z.string()),
-          operator_id: z.string(),
+      insertOperatorSchema
+        .merge(
+          z.object({
+            location_ids: z.array(z.string()),
+            operator_id: z.string(),
+          }),
+        )
+        .omit({
+          user_id: true,
         }),
-      ),
     )
     .mutation(async ({ ctx, input }) => {
       // update locationOperators

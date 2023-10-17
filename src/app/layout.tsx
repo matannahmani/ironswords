@@ -28,12 +28,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="he" suppressHydrationWarning>
+      <head>
+        <meta property="og:image" content="/api/og" />
+      </head>
       <body dir="rtl" className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider headers={headers()}>
             <div className="flex">
               <Sidebar />
-              <div className=" flex w-full flex-1 flex-col">
+              <div className=" flex w-full flex-1 flex-col  ">
                 <NavbarHeader />
                 {children}
               </div>

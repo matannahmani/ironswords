@@ -5,6 +5,7 @@ import {
   datetime,
   index,
   int,
+  json,
   mysqlEnum,
   mysqlTableCreator,
   primaryKey,
@@ -135,15 +136,43 @@ export const operators = mysqlTable(
     operator_id: varchar("operator_id", { length: 128 })
       .$defaultFn(() => nanoid())
       .primaryKey(),
-    name: varchar("name", { length: 255 }),
-    user_id: varchar("user_id", { length: 255 }).unique(),
-    phone: varchar("phone", { length: 255 }),
-    email: varchar("email", { length: 255 }),
+    name: varchar("name", { length: 255 }).notNull(),
+    user_id: varchar("user_id", { length: 255 }).unique().notNull(),
+    phone: varchar("phone", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }).notNull(),
     contact_info: varchar("contact_info", { length: 255 }),
   },
   (operator) => ({
     // indexes
     userIdIdx: index("userId_idx").on(operator.user_id),
+  }),
+);
+
+// define operatorsInvite table
+export const operatorsInvite = mysqlTable(
+  "operators_invite",
+  {
+    invite_id: varchar("invite_id", { length: 128 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
+    email: varchar("email", { length: 255 }).unique().notNull(),
+    is_claimed: boolean("is_claimed").default(false),
+    payload: json("json")
+      .$type<
+        Omit<typeof operators.$inferInsert, "user_id" | "operator_id"> & {
+          contact_info: string | undefined;
+          location_ids: string[];
+        }
+      >()
+      .notNull(),
+    expires: datetime("expires"),
+  },
+  (operatorInvite) => ({
+    // indexes
+
+    operatorInviteEmailIdx: index("operatorInviteEmail_idx").on(
+      operatorInvite.email,
+    ),
   }),
 );
 

@@ -5,7 +5,7 @@ import { type AppRouter } from "@/server/api/root";
 
 export const transformer = superjson;
 
-function getBaseUrl() {
+export function getBaseUrl() {
   if (typeof window !== "undefined") return "";
   const vc = process.env.VERCEL_URL;
   if (vc) return "https://" + vc;
