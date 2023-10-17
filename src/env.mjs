@@ -13,6 +13,8 @@ export const env = createEnv({
     DATABASE_HOST: z.string().min(1),
     DATABASE_USERNAME: z.string().min(1),
     DATABASE_URL: z.string().min(1),
+    RESEND_KEY: z.string().min(1),
+    EMAIL_FROM: z.string().email(),
     DATABASE_PASSWORD: z.string().min(1),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === "production"
@@ -49,8 +51,10 @@ export const env = createEnv({
     DATABASE_USERNAME: process.env.DATABASE_USERNAME,
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
     NODE_ENV: process.env.NODE_ENV,
+    RESEND_KEY: process.env.RESEND_KEY,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    EMAIL_FROM: process.env.EMAIL_FROM,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },

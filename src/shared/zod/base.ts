@@ -4,6 +4,7 @@ import {
   tickets,
   citys,
   operators,
+  operatorsInvite,
 } from "@/server/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -16,7 +17,29 @@ export const insertLocationOperatorSchema =
 export const insertTicketsSchema = createInsertSchema(tickets);
 export const selectTicketsSchema = createSelectSchema(tickets);
 export const insertCitySchema = createInsertSchema(citys);
-export const insertOperatorSchema = createInsertSchema(operators);
+export const insertOperatorSchema = createInsertSchema(operators).merge(
+  z.object({
+    email: z.string().email(),
+  }),
+);
+export const insertOperatorInviteSchema = createInsertSchema(operatorsInvite)
+  .merge(
+    z.object({
+      payload: insertOperatorSchema
+        .omit({
+          user_id: true,
+          operator_id: true,
+        })
+        .merge(
+          z.object({
+            location_ids: z.array(z.string()),
+          }),
+        ),
+    }),
+  )
+  .omit({
+    expires: true,
+  });
 
 export const pageSchema = z.object({
   limit: z.number().int().default(10),

@@ -31,6 +31,9 @@ import { DataTableToolbar } from "./data-table-toolbar";
 import { api } from "@/trpc/react";
 import { RouterInputs, RouterOutputs } from "@/trpc/shared";
 import { Loader2 } from "lucide-react";
+import { useViewValue } from "./view-switch";
+import { inviteColumns } from "./invites-columns";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<
@@ -42,29 +45,62 @@ interface DataTableProps<TValue> {
   initalFilters: RouterInputs["operator"]["getMany"];
 }
 
+const usePagination = ({ initalPage }: { initalPage: PaginationState }) => {
+  const viewMode = useViewValue();
+  const [{ pageIndex, pageSize }, setPagination] =
+    React.useState<PaginationState>(initalPage);
+
+  React.useEffect(() => {
+    setPagination((prev) => ({
+      pageIndex: 0,
+      pageSize: prev.pageSize,
+    }));
+  }, [viewMode]);
+
+  return [{ pageIndex, pageSize }, setPagination] as const;
+};
+
 export function DataTable<TValue>({
   columns,
   data: initalData,
   initalPage,
   initalFilters,
 }: DataTableProps<TValue>) {
-  const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>(initalPage);
+  const viewMode = useViewValue();
+  const [{ pageIndex, pageSize }, setPagination] = usePagination({
+    initalPage,
+  });
+  const [animateRef] = useAutoAnimate();
   const [filters, setFilters] = React.useState({
     ...initalFilters,
   });
-
-  const { data: queryData, isLoading } = api.operator.getMany.useQuery(
-    {
-      limit: pageSize,
-      offset: pageIndex,
-    },
-    {
-      initialData: initalData,
-      keepPreviousData: true,
-      refetchInterval: 10000,
-    },
-  );
+  const { data: invitesData, isLoading: invitesIsLoading } =
+    api.operatorInvites.getMany.useQuery(
+      {
+        limit: pageSize,
+        offset: pageIndex,
+      },
+      {
+        enabled: viewMode === "invites",
+        keepPreviousData: true,
+        refetchInterval: 10000,
+      },
+    );
+  const { data: queryData, isLoading: isOperatorsLoading } =
+    api.operator.getMany.useQuery(
+      {
+        limit: pageSize,
+        offset: pageIndex,
+      },
+      {
+        enabled: viewMode === "operators",
+        initialData: initalData,
+        keepPreviousData: true,
+        refetchInterval: 10000,
+      },
+    );
+  const isLoading =
+    viewMode === "invites" ? invitesIsLoading : isOperatorsLoading;
   const data = queryData.page;
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -82,8 +118,10 @@ export function DataTable<TValue>({
   );
 
   const table = useReactTable({
-    data,
-    columns,
+    // @ts-expect-error - typescript can't infer this union correctly
+    data: viewMode === "invites" ? invitesData?.page : data,
+    // @ts-expect-error - typescript can't infer this union correctly
+    columns: viewMode === "invites" ? inviteColumns : columns,
     state: {
       sorting,
       columnVisibility,
@@ -110,8 +148,8 @@ export function DataTable<TValue>({
   return (
     <div className="flex flex-1 flex-col space-y-4">
       <DataTableToolbar table={table} />
-      <div className="relative flex-1 rounded-md border">
-        <Table>
+      <div ref={animateRef} className="relative flex-1 rounded-md border">
+        <Table key={`viewmode-${viewMode}`}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
