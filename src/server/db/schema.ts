@@ -25,7 +25,7 @@ import { ticketCategories } from "../../shared/zod/ticketCategories";
 export const mysqlTable = mysqlTableCreator((name) => `ironswords_${name}`);
 
 export const users = mysqlTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  id: varchar("id", { length: 128 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", {
@@ -39,7 +39,7 @@ export const users = mysqlTable("user", {
 export const accounts = mysqlTable(
   "account",
   {
-    userId: varchar("userId", { length: 255 }).notNull(),
+    userId: varchar("user_id", { length: 128 }).notNull(),
     type: varchar("type", { length: 255 })
       // .$type<AdapterAccount["type"]>()
       .notNull(),
@@ -65,7 +65,7 @@ export const sessions = mysqlTable(
     sessionToken: varchar("sessionToken", { length: 255 })
       .notNull()
       .primaryKey(),
-    userId: varchar("userId", { length: 255 }).notNull(),
+    userId: varchar("user_id", { length: 128 }).notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (session) => ({
@@ -137,7 +137,7 @@ export const operators = mysqlTable(
       .$defaultFn(() => nanoid())
       .primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
-    user_id: varchar("user_id", { length: 255 }).unique().notNull(),
+    user_id: varchar("user_id", { length: 128 }).unique().notNull(),
     phone: varchar("phone", { length: 255 }).notNull(),
     email: varchar("email", { length: 255 }).notNull(),
     contact_info: varchar("contact_info", { length: 255 }),
@@ -266,7 +266,7 @@ export const warehouses = mysqlTable(
       .$defaultFn(() => nanoid())
       .primaryKey(),
     name: varchar("name", { length: 255 }),
-    city_id: int("city_id"),
+    city_id: varchar("city_id", { length: 128 }),
   },
   (warehouse) => ({
     // indexes
@@ -289,8 +289,8 @@ export const items = mysqlTable(
     item_id: varchar("item_id", { length: 128 })
       .$defaultFn(() => nanoid())
       .primaryKey(),
-    warehouse_id: int("warehouse_id"),
-    category_id: int("category_id"),
+    warehouse_id: varchar("warehouse_id", { length: 128 }),
+    category_id: varchar("category_id", { length: 128 }),
     name: varchar("name", { length: 255 }),
     quantity: int("quantity"),
     stock: mysqlEnum("stock", ["none", "low", "medium", "high"]),
