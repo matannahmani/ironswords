@@ -266,11 +266,12 @@ export const warehouses = mysqlTable(
       .$defaultFn(() => nanoid())
       .primaryKey(),
     name: varchar("name", { length: 255 }),
-    city_id: varchar("city_id", { length: 128 }),
+    location_id: varchar("location_id", { length: 128 }),
+    capacity: mysqlEnum("priority", ["UNDER", "FULL", "OVER"]),
   },
   (warehouse) => ({
     // indexes
-    cityIdIdx: index("cityId_idx").on(warehouse.city_id),
+    locationIdIdx: index("locationId_idx").on(warehouse.location_id),
   }),
 );
 
@@ -324,13 +325,13 @@ export const categoryRelations = relations(categories, ({ many }) => ({
   items: many(items),
 }));
 
-export const warehouseRelations = relations(warehouses, ({ many, one }) => ({
+/*export const warehouseRelations = relations(warehouses, ({ many, one }) => ({
   items: many(items),
   city: one(citys, {
     fields: [warehouses.city_id],
     references: [citys.city_id],
   }),
-}));
+}));*/
 
 export const ticketRelations = relations(tickets, ({ many, one }) => ({
   ticketResponses: many(ticketResponses),
@@ -378,7 +379,9 @@ export const operatorRelations = relations(operators, ({ many, one }) => ({
 
 export const cityRelations = relations(citys, ({ many }) => ({
   locations: many(locations),
+/*
   warehouses: many(warehouses),
+*/
 }));
 
 export const locationOperatorRelations = relations(
