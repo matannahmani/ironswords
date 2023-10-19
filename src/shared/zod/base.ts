@@ -5,6 +5,7 @@ import {
   citys,
   operators,
   operatorsInvite,
+  warehouses
 } from "@/server/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -22,6 +23,9 @@ export const insertOperatorSchema = createInsertSchema(operators).merge(
     email: z.string().email(),
   }),
 );
+
+export const insertWarehouseSchema = createInsertSchema(warehouses);
+
 export const insertOperatorInviteSchema = createInsertSchema(operatorsInvite)
   .merge(
     z.object({
