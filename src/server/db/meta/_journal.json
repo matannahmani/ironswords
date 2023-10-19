@@ -22,6 +22,20 @@
       "when": 1697346720643,
       "tag": "0002_rare_katie_power",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1697637929715,
+      "tag": "0003_tense_war_machine",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1697730796268,
+      "tag": "0004_graceful_kylun",
+      "breakpoints": true
     }
   ]
 }

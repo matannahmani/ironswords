@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "79d468d5-ffc8-43c0-8567-7ad56dd605a2",
+  "id": "96ea5554-e5e5-457a-aee9-768246e0510e",
   "prevId": "cf0f5ee1-4b97-45ec-a3d9-8ad6243127bf",
   "tables": {
     "ironswords_account": {
@@ -984,6 +984,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "city_id": {
+          "name": "city_id",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "priority": {
           "name": "priority",
           "type": "enum('UNDER','FULL','OVER')",
@@ -997,6 +1004,13 @@
           "name": "locationId_idx",
           "columns": [
             "location_id"
+          ],
+          "isUnique": false
+        },
+        "cityId_idx": {
+          "name": "cityId_idx",
+          "columns": [
+            "city_id"
           ],
           "isUnique": false
         }
