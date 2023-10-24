@@ -1,0 +1,1 @@
+ALTER TABLE `ironswords_warehouse` RENAME COLUMN `priority` TO `capacity`;
