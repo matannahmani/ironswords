@@ -18,7 +18,7 @@ const MyTicketsPage = async () => {
   if (!user?.user)
     return (
       <div className="p-4">
-        <h1>ענו מצטערים אך אין לך הרשאה לצפות בדף זה</h1>
+        <h1>אנו מצטערים אך אין לך הרשאה לצפות בדף זה</h1>
         <span>אנא התחבר בשביל לצפות בדף זה</span>
       </div>
     );
