@@ -267,7 +267,7 @@ export const warehouses = mysqlTable(
       .primaryKey(),
     name: varchar("name", { length: 255 }),
     location_id: varchar("location_id", { length: 128 }),
-    capacity: mysqlEnum("priority", ["UNDER", "FULL", "OVER"]),
+    capacity: mysqlEnum("capacity", ["UNDER", "FULL", "OVER"]),
   },
   (warehouse) => ({
     // indexes

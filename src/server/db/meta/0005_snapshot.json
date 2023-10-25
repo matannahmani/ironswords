@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "cf0f5ee1-4b97-45ec-a3d9-8ad6243127bf",
-  "prevId": "bba53318-b00d-4dff-9e5e-a5e0d531913a",
+  "id": "8e46604b-0066-46ba-a27e-aa1cefe693ef",
+  "prevId": "79d468d5-ffc8-43c0-8567-7ad56dd605a2",
   "tables": {
     "ironswords_account": {
       "name": "ironswords_account",
@@ -977,19 +977,26 @@
           "notNull": false,
           "autoincrement": false
         },
-        "city_id": {
-          "name": "city_id",
+        "location_id": {
+          "name": "location_id",
           "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "capacity": {
+          "name": "capacity",
+          "type": "enum('UNDER','FULL','OVER')",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         }
       },
       "indexes": {
-        "cityId_idx": {
-          "name": "cityId_idx",
+        "locationId_idx": {
+          "name": "locationId_idx",
           "columns": [
-            "city_id"
+            "location_id"
           ],
           "isUnique": false
         }
@@ -1011,8 +1018,7 @@
     "schemas": {},
     "tables": {},
     "columns": {
-      "\"ironswords_account\".\"userId\"": "\"ironswords_account\".\"user_id\"",
-      "\"ironswords_session\".\"userId\"": "\"ironswords_session\".\"user_id\""
+      "\"ironswords_warehouse\".\"priority\"": "\"ironswords_warehouse\".\"capacity\""
     }
   }
 }
