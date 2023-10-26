@@ -325,13 +325,12 @@ export const categoryRelations = relations(categories, ({ many }) => ({
   items: many(items),
 }));
 
-/*export const warehouseRelations = relations(warehouses, ({ many, one }) => ({
-  items: many(items),
-  city: one(citys, {
-    fields: [warehouses.city_id],
-    references: [citys.city_id],
-  }),
-}));*/
+export const warehouseRelations = relations(warehouses, ({ one }) => ({
+  location: one(locations, {
+      fields: [warehouses.location_id],
+      references: [locations.location_id]
+  })
+}));
 
 export const ticketRelations = relations(tickets, ({ many, one }) => ({
   ticketResponses: many(ticketResponses),
