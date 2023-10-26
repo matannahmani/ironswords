@@ -72,6 +72,12 @@ const navItems: {
     icon: <Users size={24} />,
     isAdmin: true,
   },
+  {
+    href: "/warehouses",
+    title: "ניהול מחסנים",
+    icon: <Users size={24} />,
+    isAdmin: true,
+  },
 ];
 
 export default function Sidebar({

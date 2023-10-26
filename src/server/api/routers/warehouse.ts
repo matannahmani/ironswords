@@ -1,8 +1,8 @@
 import {z} from "zod";
 import {adminProcedure, createTRPCRouter, protectedProcedure, publicProcedure} from "@/server/api/trpc";
-import {citys, locations, warehouses} from "@/server/db/schema";
+import {locations, warehouses} from "@/server/db/schema";
 import {insertWarehouseSchema, pageSchema} from "@/shared/zod/base";
-import {eq} from "drizzle-orm";
+import {eq, sql} from "drizzle-orm";
 
 export const warehouseRouter = createTRPCRouter({
     createOne: protectedProcedure
@@ -21,8 +21,23 @@ export const warehouseRouter = createTRPCRouter({
             limit: input.limit,
         });
     }),
-    all: protectedProcedure.query(async ({ ctx }) => {
-        return await ctx.db.query.warehouses.findMany();
+    all: protectedProcedure.input(pageSchema).query(async ({ ctx, input }) => {
+        const dataP = await ctx.db.query.warehouses.findMany({
+            offset: input.offset,
+            limit: input.limit,
+        });
+        const totalP = ctx.db
+            .select({ count: sql<number>`count(*)` })
+            .from(warehouses)
+            .execute();
+        const [page, total] = await Promise.all([dataP, totalP]);
+
+        return {
+            total: Number(total?.[0]?.count ?? 0),
+            page,
+            totalPages: Math.ceil((total?.[0]?.count ?? 0) / input?.limit ?? 10),
+        };
+        // return await ctx.db.query.warehouses.findMany();
     }),
     getOne: adminProcedure.input(z.string()).query(async ({ ctx, input }) => {
         return await ctx.db.query.warehouses.findFirst({
