@@ -57,6 +57,12 @@ export const warehouseRouter = createTRPCRouter({
     getWarehousesInCity: publicProcedure
         .input(z.string())
         .query(async ({ctx, input}) => {
-            return await ctx.db.select().from(warehouses).innerJoin(locations, eq(warehouses.location_id, locations.location_id)).where(eq(locations.city_id, input)).execute();
+            const locationIds = await ctx.db.select({location_id:locations.location_id}).from(locations).where(eq(locations.city_id, input)).execute();
+            return await ctx.db.query.warehouses.findMany({
+                where: (tb, op) => op.inArray(tb.location_id, locationIds.flatMap(id => id.location_id)),
+                with: {
+                    location: true,
+                }
+            }).execute();
         }),
 });
