@@ -15,19 +15,13 @@ export const warehouseRouter = createTRPCRouter({
         .mutation(async ({ctx, input}) => {
             return await ctx.db.insert(warehouses).values(input).execute();
         }),
-    getMany: adminProcedure.input(pageSchema).query(async ({ctx, input}) => {
-        return await ctx.db.query.warehouses.findMany({
+    getMany: protectedProcedure.input(pageSchema).query(async ({ctx, input}) => {
+        const dataP = await ctx.db.query.warehouses.findMany({
             offset: input.offset,
             limit: input.limit,
             with: {
                 location: true,
             }
-        });
-    }),
-    all: protectedProcedure.input(pageSchema).query(async ({ ctx, input }) => {
-        const dataP = await ctx.db.query.warehouses.findMany({
-            offset: input.offset,
-            limit: input.limit,
         });
         const totalP = ctx.db
             .select({ count: sql<number>`count(*)` })
@@ -40,7 +34,9 @@ export const warehouseRouter = createTRPCRouter({
             page,
             totalPages: Math.ceil((total?.[0]?.count ?? 0) / input?.limit ?? 10),
         };
-        // return await ctx.db.query.warehouses.findMany();
+    }),
+    all: protectedProcedure.query(async ({ctx}) => {
+        return await ctx.db.query.warehouses.findMany();
     }),
     getOne: adminProcedure.input(z.string()).query(async ({ctx, input}) => {
         return await ctx.db.query.warehouses.findFirst({
