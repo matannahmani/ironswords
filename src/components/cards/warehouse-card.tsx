@@ -2,7 +2,7 @@
 import {locations, warehouses} from "@/server/db/schema";
 import {api} from "@/trpc/react";
 import {Button} from "@ui/button";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@ui/card";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle,} from "@ui/card";
 import {Input} from "@ui/input";
 import {Label} from "@ui/label";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@ui/select";
@@ -65,17 +65,8 @@ export const WarehouseCard: React.FC<
         <Card className="border-none">
             <CardHeader>
                 <CardTitle>
-                    {props.readonly ? 'צפה במחסן' : props.warehouse_id ? 'עדכון מחסן' : 'מחסן חדש'}
+                    {props.readonly ? "צפה במחסן" : props?.warehouse_id ? "עדכון מחסן" : "מחסן חדש"}
                 </CardTitle>
-                <CardDescription>
-                    {/* What area are you having problems with? */}
-                    {/* מה נושא המיקום? */}
-                    {props.readonly
-                        ? `כתובת מחסן: ${state?.location?.address}`
-                        : state?.location?.address
-                            ? `כתובת מחסן: ${state?.location?.address}`
-                            : "פתיחת מחסן"}
-                </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
                 <div className="grid gap-2">
@@ -89,6 +80,27 @@ export const WarehouseCard: React.FC<
                         id="name"
                         placeholder="שם המחסן"
                     />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="location">מיקןם</Label>
+                    <Select
+                        disabled={props.readonly}
+                        defaultValue={props.location_id ?? ""}
+                        onValueChange={(value) =>
+                            setState((prev) => ({ ...prev, location_id: value }))
+                        }
+                    >
+                        <SelectTrigger id="area">
+                            <SelectValue placeholder="בחר מיקום" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {allLocations.map((location) => (
+                                <SelectItem key={location.location_id} value={location.location_id}>
+                                    {location?.address}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="capacity">נפח</Label>
@@ -129,8 +141,7 @@ export const WarehouseCard: React.FC<
                     disabled={props.readonly ?? isLoading}
                     onClick={() => {
                         if (state.warehouse_id) {
-                            // @ts-expect-error - TODO: fix this
-                            void updateMutation.mutateAsync(state);
+                            void updateMutation.mutateAsync({id: state.warehouse_id, data: state});
                         } else void mutation.mutateAsync(state);
                     }}
                 >

@@ -6,6 +6,7 @@ import {pageSchema} from "@/shared/zod/base";
 import {columns} from "@/app/warehouses/components/columns";
 import {DataTable} from "@/app/warehouses/components/data-table";
 import {WarehouseCard} from "@/components/cards/warehouse-card";
+import {LocationsInitializer} from "@/app/warehouses/components/locations-context";
 
 export const metadata: Metadata = {
     title: "Warehouses",
@@ -32,11 +33,13 @@ export default async function WarehousePage({
             </div>
         );
     }
+    const locationsP = api.location.all.query();
     const warehouses = api.warehouse.getMany.query(fetchInput.data);
-    const [data] = await Promise.all([warehouses]);
+    const [data, locations] = await Promise.all([warehouses, locationsP]);
 
     return (
         <>
+            <LocationsInitializer locations={locations} />
             <div className="flex h-full flex-1 flex-col space-y-4 p-4  md:space-y-8 md:p-8">
                 <div className="flex items-center justify-between space-y-2">
                     <div>
