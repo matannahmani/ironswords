@@ -29,12 +29,12 @@ import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<
-    RouterOutputs["warehouse"]["all"]["page"][number],
+    RouterOutputs["warehouse"]["getMany"]["page"][number],
     TValue
   >[];
-  data: RouterOutputs["warehouse"]["all"];
+  data: RouterOutputs["warehouse"]["getMany"];
   initalPage: PaginationState;
-  initalFilters: RouterInputs["warehouse"]["all"];
+  initalFilters: RouterInputs["warehouse"]["getMany"];
 }
 
 const usePagination = ({ initalPage }: { initalPage: PaginationState }) => {
@@ -68,7 +68,7 @@ export function DataTable<TValue>({
   });
 
   const { data: queryData, isLoading: isWarehouseLoading } =
-    api.warehouse.all.useQuery(
+    api.warehouse.getMany.useQuery(
       {
         limit: pageSize,
         offset: pageIndex,
