@@ -3,9 +3,9 @@ import {api} from "@/trpc/server";
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogTrigger,} from "@/components/ui/dialog";
 import {pageSchema} from "@/shared/zod/base";
-import {OperatorCard} from "@/components/cards/operator-card";
 import {columns} from "@/app/warehouses/components/columns";
 import {DataTable} from "@/app/warehouses/components/data-table";
+import {WarehouseCard} from "@/components/cards/warehouse-card";
 
 export const metadata: Metadata = {
     title: "Warehouses",
@@ -32,7 +32,7 @@ export default async function WarehousePage({
             </div>
         );
     }
-    const warehouses = api.warehouse.all.query(fetchInput.data);
+    const warehouses = api.warehouse.getMany.query(fetchInput.data);
     const [data] = await Promise.all([warehouses]);
 
     return (
@@ -44,16 +44,16 @@ export default async function WarehousePage({
                             ברוך שובך למערכת חרבות ברזל!
                         </h2>
                         <p className="text-muted-foreground">
-                            כאן תוכל לצפות רשימת המתאמים שלך
+                            כאן תוכל לצפות רשימת המחסנים
                         </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-4 space-x-2">
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button className="">הזמן מתאם</Button>
+                                <Button className="">מחסן חדש</Button>
                             </DialogTrigger>
                             <DialogContent className="w-[90vw] sm:max-w-[425px]">
-                                <OperatorCard />
+                                <WarehouseCard />
                             </DialogContent>
                         </Dialog>
                     </div>
