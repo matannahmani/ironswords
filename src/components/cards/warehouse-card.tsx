@@ -128,7 +128,7 @@ export const WarehouseCard: React.FC<
                 <Button
                     disabled={props.readonly ?? isLoading}
                     onClick={() => {
-                        if (state.location_id) {
+                        if (state.warehouse_id) {
                             // @ts-expect-error - TODO: fix this
                             void updateMutation.mutateAsync(state);
                         } else void mutation.mutateAsync(state);
