@@ -1,29 +1,19 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Row } from "@tanstack/react-table";
+import {DotsHorizontalIcon} from "@radix-ui/react-icons";
+import {Row} from "@tanstack/react-table";
 
-import { Button } from "@ui/button";
+import {Button} from "@ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
-
-import { labels } from "../data/data";
-import { taskSchema } from "../data/schema";
-import { Pen, View } from "lucide-react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { RequestCard } from "@/components/cards/request-card";
-import { OperatorCard } from "@/components/cards/operator-card";
+import {Pen, View} from "lucide-react";
+import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
+import {WarehouseCard} from "@/components/cards/warehouse-card";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -53,7 +43,7 @@ export function DataTableRowActions<TData>({
           </DialogTrigger>
           <DialogContent>
             {/* @ts-expect-error - generic is not fully typed yet. */}
-            <OperatorCard {...row.original} />
+            <WarehouseCard {...row.original} />
           </DialogContent>
         </Dialog>
         <DropdownMenuSeparator />
@@ -65,7 +55,7 @@ export function DataTableRowActions<TData>({
             </DropdownMenuItem>
           </DialogTrigger>
           <DialogContent>
-            <OperatorCard {...row.original} readonly />
+            <WarehouseCard {...row.original} readonly />
           </DialogContent>
         </Dialog>
       </DropdownMenuContent>
