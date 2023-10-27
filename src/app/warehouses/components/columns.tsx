@@ -15,7 +15,7 @@ declare module "@tanstack/table-core" {
   }
 }
 export const columns: ColumnDef<
-  RouterOutputs["warehouse"]["getMany"][number]
+  RouterOutputs["warehouse"]["getMany"]["page"][number]
 >[] = [
   {
     id: "select",
@@ -80,12 +80,12 @@ export const columns: ColumnDef<
   {
     accessorKey: "location_id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="איימל" />
+      <DataTableColumnHeader column={column} title="כתובת" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex items-center">
-          <span>{row.original.location_id}</span>
+          <span>{row.original?.location?.address}</span>
         </div>
       );
     },
@@ -93,13 +93,13 @@ export const columns: ColumnDef<
       return value.includes(row.getValue(id));
     },
     meta: {
-      title: "איימל",
+      title: "כתובת",
     },
   },
   {
     accessorKey: "capacity",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="איימל" />
+        <DataTableColumnHeader column={column} title="נפח" />
     ),
     cell: ({ row }) => {
       return (
