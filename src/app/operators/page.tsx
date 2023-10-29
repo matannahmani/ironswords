@@ -28,7 +28,7 @@ import { auth } from "@/server/auth";
 import { pageSchema } from "@/shared/zod/base";
 import { LocationCard } from "@/components/cards/location-card";
 import { OperatorCard } from "@/components/cards/operator-card";
-import { CitiesInitailizer } from "./components/cities-context";
+import { CitiesInitializer } from "./components/cities-context";
 import ViewSwitch from "./components/view-switch";
 export const metadata: Metadata = {
   title: "Operators",
@@ -61,7 +61,7 @@ export default async function LocationsPage({
 
   return (
     <>
-      <CitiesInitailizer cities={cities} />
+      <CitiesInitializer cities={cities} />
       <div className="flex h-full flex-1 flex-col space-y-4 p-4  md:space-y-8 md:p-8">
         <div className="flex items-center justify-between space-y-2">
           <div>

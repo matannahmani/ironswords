@@ -11,7 +11,7 @@ export const useCities = () => {
   return [cities, setCities] as const;
 };
 
-export const CitiesInitailizer: React.FC<{
+export const CitiesInitializer: React.FC<{
   cities: RouterOutputs["city"]["all"];
 }> = ({ cities }) => {
   const [, setCities] = useCities();

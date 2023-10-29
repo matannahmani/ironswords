@@ -1,22 +1,11 @@
-import { z } from "zod";
+import {z} from "zod";
 
-import {
-  adminProcedure,
-  createTRPCRouter,
-  operatorProcedure,
-  protectedProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
-import { createInsertSchema } from "drizzle-zod";
-import { locationOperators, locations, tickets } from "@/server/db/schema";
-import { SQL, SQLWrapper, and, eq, inArray, like, sql } from "drizzle-orm";
-import { TRPCError } from "@trpc/server";
-import { getLocationTicketsSchema } from "@/shared/zod/tickets";
-import {
-  insertLocationOperatorSchema,
-  insertLocationSchema,
-  pageSchema,
-} from "@/shared/zod/base";
+import {adminProcedure, createTRPCRouter, operatorProcedure,} from "@/server/api/trpc";
+import {locationOperators, locations, tickets} from "@/server/db/schema";
+import {and, eq, inArray, like, sql} from "drizzle-orm";
+import {TRPCError} from "@trpc/server";
+import {getLocationTicketsSchema} from "@/shared/zod/tickets";
+import {insertLocationOperatorSchema, insertLocationSchema, pageSchema,} from "@/shared/zod/base";
 
 export const locationRouter = createTRPCRouter({
   createOne: adminProcedure
@@ -52,6 +41,9 @@ export const locationRouter = createTRPCRouter({
     return await ctx.db.query.locations.findFirst({
       where: (tb, op) => op.eq(tb.location_id, input),
     });
+  }),
+  all: adminProcedure.query(async ({ ctx, input }) => {
+    return await ctx.db.query.locations.findMany();
   }),
   updateOne: adminProcedure
     .input(
