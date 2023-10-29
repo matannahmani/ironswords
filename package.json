@@ -8,6 +8,7 @@
     "db:studio": "dotenv drizzle-kit studio",
     "db:drop": "dotenv drizzle-kit drop --out=drizzle",
     "db:check": "dotenv drizzle-kit check:mysql",
+    "tsc": "tsc --noEmit -p .",
     "db:migrate": "dotenv drizzle-kit generate:mysql",
     "dev": "next dev",
     "lint": "next lint",
@@ -112,6 +113,7 @@
     "prettier-plugin-tailwindcss": "^0.5.1",
     "tailwindcss": "^3.3.3",
     "tailwindcss-rtl": "^0.9.0",
+    "tsc": "^2.0.4",
     "typescript": "^5.1.6"
   },
   "ct3aMetadata": {

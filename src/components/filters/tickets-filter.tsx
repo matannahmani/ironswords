@@ -25,6 +25,7 @@ const useDebounced = ({
   const pathname = usePathname();
   const router = useRouter();
   useEffect(() => {
+    if (!searchParams) return;
     const newParams = new URLSearchParams(searchParams);
     if (!debouncedValue || debouncedValue === "") {
       newParams.delete(key);

@@ -23,7 +23,7 @@ export const SelectLocationWrapper: React.FC<{
   fallback?: React.ReactNode;
 }> = ({ children, fallback }) => {
   const pathname = usePathname();
-  if (!pathname.includes("operators")) return fallback ?? null;
+  if (!pathname?.includes("operators")) return fallback ?? null;
   return <>{children}</>;
 };
 

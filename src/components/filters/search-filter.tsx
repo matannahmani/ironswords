@@ -25,11 +25,11 @@ const SearchFilter: React.FC<{
   const router = useRouter();
   const searchParams = useSearchParams();
   const [val, setVal] = useState<string | undefined>(
-    searchParams.get(paramName) ?? undefined,
+    searchParams?.get(paramName) ?? undefined,
   );
   const onSelect = (v: string) => {
     // if includes, remove, else add
-    const newParams = new URLSearchParams(searchParams.toString());
+    const newParams = new URLSearchParams(searchParams?.toString());
     if (v === "clear") {
       newParams.delete(paramName);
       setVal("");

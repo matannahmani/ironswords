@@ -86,9 +86,9 @@ export const authConfig: NextAuthConfig = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  // session: {
-  //   strategy: "jwt",
-  // },
+  session: {
+    strategy: "database",
+  },
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
