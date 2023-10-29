@@ -45,6 +45,7 @@ const CardsContainer: React.FC<{
     },
   );
   const handlePageMove = (direction: "next" | "previous") => {
+    if (!params) return;
     const newParams = new URLSearchParams(params);
     const currentPage = Number(newParams.get("page"));
     if (direction === "next") {
